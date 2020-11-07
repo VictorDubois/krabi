@@ -1,0 +1,9 @@
+[submodule "goal_strategy"]
+	path = goal_strategy
+	url = git@github.com:VictorDubois/goal_strategy.git
+[submodule "lidar_strategy"]
+	path = lidar_strategy
+	url = git@github.com:VictorDubois/lidar_strategy.git
+[submodule "krabi-msgs"]
+	path = krabi-msgs
+	url = git@github.com:VictorDubois/krabi-msgs.git
