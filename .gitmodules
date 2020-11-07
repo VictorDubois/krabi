@@ -7,3 +7,6 @@
 [submodule "krabi-msgs"]
 	path = krabi-msgs
 	url = git@github.com:VictorDubois/krabi-msgs.git
+[submodule "main-strategy"]
+	path = main-strategy
+	url = git@github.com:VictorDubois/main-strategy.git
