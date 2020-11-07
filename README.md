@@ -16,5 +16,12 @@ To update the submodules, once initialized:
 - `git submodule update`
 
 # Build
-The "krabi_mgs" package is needed for all the other packages. To build it first, do:
-- `catkin_make krabi_msgs_generate_messages_cpp && catkin_make`
+To build all the projects:
+- `catkin build`
+To build in debug, run this command before:
+- `catkin config --cmake-args -DCMAKE_BUILD_TYPE=Debug`
+
+# Run
+To run the robot within the simulation do:
+- `source devel/setup.zsh`
+- `roslaunch krabi_bringup kraboss.launch isBlue:=false`

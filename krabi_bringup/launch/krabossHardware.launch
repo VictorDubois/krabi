@@ -1,0 +1,20 @@
+<launch>
+    <node name="gpio_kraboss_node" pkg="gpio_kraboss" type="main.py" />
+    <!--<node name="lcd_node" pkg="rosserial_server" type="serial_node.py">
+    <param name="port" value="/dev/lcd"/>
+    <param name="baud" value="57600"/>
+  </node>-->
+    <node name="motors_node" pkg="rosserial_python" type="serial_node.py">
+        <param name="port" value="/dev/motors"/>
+        <param name="baud" value="115200"/>
+    </node>
+    <node name="servos_node" pkg="rosserial_python" type="serial_node.py">
+        <param name="port" value="/dev/servos"/>
+        <param name="baud" value="57600"/>
+    </node>
+    <node name="neato_laser_publisher" pkg="xv_11_laser_driver" type="neato_laser_publisher">
+        <param name="port" value="/dev/lidar"/>
+        <param name="baud" value="115200"/>
+    </node>
+    <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.1 3.14 3.14 0 /base_link /neato_laser 50"/>
+</launch>

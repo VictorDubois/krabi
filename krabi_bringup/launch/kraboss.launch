@@ -1,0 +1,17 @@
+<launch>
+    <arg name="isBlue" default="false"/>
+    <arg name="isSimulation" default="true"/>
+
+    <group if="$(arg isSimulation)">
+        <include file="$(find main_strategy)/launch/krabossSimu.launch">
+            <arg name="isBlue" value="$(arg isBlue)"/>
+        </include>
+    </group>
+    <group unless="$(arg isSimulation)">
+        <include file="$(find main_strategy)/launch/krabossHardware.launch" />
+    </group>
+
+    <include file="$(find main_strategy)/launch/krabossMain.launch">
+        <arg name="isBlue" value="$(arg isBlue)"/>
+    </include>
+</launch>
