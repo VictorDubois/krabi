@@ -3,15 +3,15 @@
     <arg name="isSimulation" default="true"/>
 
     <group if="$(arg isSimulation)">
-        <include file="$(find main_strategy)/launch/krabossSimu.launch">
+        <include file="$(find krabi_bringup)/launch/krabossSimu.launch">
             <arg name="isBlue" value="$(arg isBlue)"/>
         </include>
     </group>
     <group unless="$(arg isSimulation)">
-        <include file="$(find main_strategy)/launch/krabossHardware.launch" />
+        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" />
     </group>
 
-    <include file="$(find main_strategy)/launch/krabossMain.launch">
+    <include file="$(find krabi_bringup)/launch/krabossMain.launch">
         <arg name="isBlue" value="$(arg isBlue)"/>
     </include>
 </launch>
