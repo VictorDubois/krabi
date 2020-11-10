@@ -1,0 +1,16 @@
+---
+BasedOnStyle: Mozilla
+BreakBeforeBraces: Allman
+BreakBeforeBinaryOperators: All
+IndentWidth: 4
+ConstructorInitializerIndentWidth: 2
+ColumnLimit: 100
+AccessModifierOffset: -4
+IndentCaseLabels: false
+AllowShortFunctionsOnASingleLine: false
+FixNamespaceComments: true
+AlwaysBreakAfterReturnType: None
+AlwaysBreakAfterDefinitionReturnType: None
+MacroBlockBegin: "^MAPS_BEGIN_[A-Z]*_DEFINITION$"
+MacroBlockEnd: "^MAPS_END_[A-Z]*_DEFINITION$"
+Language: Cpp
