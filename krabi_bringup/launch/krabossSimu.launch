@@ -1,11 +1,8 @@
 <launch>
   <arg name="isBlue" default="false"/>
-  <remap from="/cmd_vel" to="/krabby/cmd_vel"/>
-  <remap from="/odom_sub" to="/krabby/odom"/>
-  <node pkg="tf" type="static_transform_publisher" name="odom_map_link" args="0 0 0.0 0 0 0 /odom /map 50"/>
-  <node pkg="tf" type="static_transform_publisher" name="odom_simu_link" args="0 0 0.01 0 0 0 /krabby/odom /odom 50"/>
-  <node pkg="tf" type="static_transform_publisher" name="neato_simu" args="0 0 0 0 0 0 /krabby/neato_laser /neato_laser 50"/>
-  <node pkg="tf" type="static_transform_publisher" name="base_link_simu" args="0 0 0 0 0 0 /krabby/base_link /base_link 50"/>
+  <node pkg="rostopic" type="rostopic" name="tirette"  args='pub /krabby/tirette std_msgs/Bool "data: true"'/>
+
+  <node pkg="tf" type="static_transform_publisher" name="odom_map_link" args="0 0 0.0 0 0 0 /krabby/odom /map 50"/>
   <include file="$(find krabby_description)/launch/krabby_simulation.launch">
     <arg name="isBlue" value="$(arg isBlue)"/>
   </include>
