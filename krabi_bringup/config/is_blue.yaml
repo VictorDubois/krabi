@@ -1,0 +1,4 @@
+is_blue: true
+init_pose/x: -1.25
+init_pose/y: 0.20
+init_pose/theta: 0

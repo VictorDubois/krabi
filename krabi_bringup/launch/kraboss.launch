@@ -2,6 +2,10 @@
     <arg name="isBlue" default="false"/>
     <arg name="isSimulation" default="true"/>
 
+    <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
+    <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
+
+
     <group if="$(arg isSimulation)">
         <include file="$(find krabi_bringup)/launch/krabossSimu.launch">
             <arg name="isBlue" value="$(arg isBlue)"/>

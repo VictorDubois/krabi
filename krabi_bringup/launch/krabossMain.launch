@@ -2,7 +2,7 @@
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find krabi_bringup)/config/custom_rosconsole.conf"/>  
   <arg name="isBlue" default="false"/>
   <param name="isBlue" value="$(arg isBlue)"/>
-  <node name="main_strategy_node" pkg="main_strategy" type="main_strategy_node" output="screen"/>
+  <node name="main_strategy_node" pkg="main_strategy" type="main_strategy_node" />
   <node name="goal_strategy_node" pkg="goal_strategy" type="goal_strategy_node"/>
   <node name="lidar_strategy_node" pkg="lidar_strategy" type="lidar_strategy_node"/>
 </launch>
