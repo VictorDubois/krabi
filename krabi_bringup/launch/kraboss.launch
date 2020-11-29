@@ -14,7 +14,7 @@
         <param name="/use_sim_time" value="true"/>
     </group>
     <group unless="$(arg isSimulation)">
-        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" />
+        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
     </group>
 
     <include file="$(find krabi_bringup)/launch/krabossMain.launch" ns="/krabby">

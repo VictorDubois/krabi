@@ -17,5 +17,6 @@
         <param name="baud" value="115200"/>
     </node>
     <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.1 3.14 3.14 0 /krabby/base_link /krabby/neato_laser 50"/>
-    <node name="main_strategy_node" pkg="main_strategy" type="odometry_node" ns="krabby" />
+    <node pkg="tf" type="static_transform_publisher" name="odom_map" args="0 0 0 0 0 0 /krabby/map /krabby/odom 50"/>
+    <node name="odometry_node" pkg="main_strategy" type="odometry_node"/>
 </launch>
