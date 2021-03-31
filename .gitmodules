@@ -10,3 +10,6 @@
 [submodule "main-strategy"]
 	path = main-strategy
 	url = git@github.com:VictorDubois/main-strategy.git
+[submodule "xv_11_laser_driver"]
+	path = xv_11_laser_driver
+	url = https://github.com/rohbotics/xv_11_laser_driver.git
