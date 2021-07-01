@@ -16,16 +16,18 @@
     <group unless="$(arg isSimulation)">
         <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
 	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
+
+    </group>
+
         <group if="$(arg isBlue)">
             <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.25 0.2 0 0 0 0 /map /krabby/odom 50"/>
         </group>
         <group unless="$(arg isBlue)">
             <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.25 0.2 0 3.1451 0 0 /map /krabby/odom 50"/>
         </group>
-
-    </group>
-
     <include file="$(find krabi_bringup)/launch/krabossMain.launch" ns="/krabby">
         <arg name="isBlue" value="$(arg isBlue)"/>
     </include>
+    <include file="$(find aruco_to_pose)/launch/weathercock_detector_only.launch" ns="/krabby" />
+    <node name="odometry_node" pkg="main_strategy" type="odometry_node" ns="/krabby"/>
 </launch>
