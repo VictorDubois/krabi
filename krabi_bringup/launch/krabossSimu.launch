@@ -6,5 +6,6 @@
   <include file="$(find krabby_description)/launch/krabby_simulation.launch">
     <arg name="isBlue" value="$(arg isBlue)"/>
   </include>
+  <node type="rviz" name="rviz" pkg="rviz" args="-d /home/vdubois/Documents/Perso/Code/kraboss_refactro.rviz" />
 </launch>
 
