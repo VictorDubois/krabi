@@ -17,10 +17,10 @@
         <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
 	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
         <group if="$(arg isBlue)">
-            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.30 0.2 0 0 0 0 /map /krabby/odom 50"/>
+            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.38 0.2 0 0 0 0 /map /krabby/odom 50"/>
         </group>
         <group unless="$(arg isBlue)">
-            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.30 0.2 0 3.1451 0 0 /map /krabby/odom 50"/>
+            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.38 0.2 0 3.1451 0 0 /map /krabby/odom 50"/>
         </group>
 
     </group>
