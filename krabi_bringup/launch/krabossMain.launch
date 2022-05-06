@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <launch>
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find krabi_bringup)/config/custom_rosconsole.conf"/>  
   <arg name="isBlue" default="false"/>
@@ -5,5 +7,29 @@
   <node name="main_strategy_node" pkg="main_strategy" type="main_strategy_node" />
   <node name="goal_strategy_node" pkg="goal_strategy" type="goal_strategy_node"/>
   <node name="lidar_strategy_node" pkg="lidar_strategy" type="lidar_strategy_node"/>
+  <!--loc mode-->
+  <node name="loc2d_ros" pkg="iris_lama_ros" type="loc2d_ros">
+    <param name="use_map_topic" value="true" />
+    <param name="global_frame_id" value="map" />
+    <param name="odom_frame_id" value="krabby/odom" />
+    <param name="base_frame_id" value="krabby/neato_laser" />
+    <param name="scan_topic" value="scan" />
+    <param name="truncate" value="0.2" />
+    <param name="create_summary" value="true" />
+    <param name="initial_pos_x" value="0.0" />
+  </node>
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/maxime/catkin_build_ws/src/krabi/map/enfinputin.yaml"/>
+<!--mapping mode
+ <node name="slam2d_ros" pkg="iris_lama_ros" type="slam2d_ros">
+       <param name="global_frame_id" value="map" />
+       <param name="odom_frame_id" value="krabby/odom" />
+       <param name="base_frame_id" value="krabby/neato_laser" />
+       <param name="scan_topic" value="scan" />
+       <param name="truncate" value="0.2" />
+       <param name="create_summary" value="true" />
+       <param name="initial_pos_x" value="0.0" />
+    </node>-->
+ <!-- <node name="map_saver" pkg="map_server" type="map_saver" args="-f map_test"/> 
+-->
 </launch>
 

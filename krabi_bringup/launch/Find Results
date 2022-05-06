@@ -1,0 +1,10 @@
+Searching 6524 files for "odom_map_link"
+
+/home/maxime/catkin_build_ws/src/krabi/krabi_bringup/launch/krabossSimu.launch:
+    3    <node pkg="rostopic" type="rostopic" name="tirette"  args='pub /krabby/tirette std_msgs/Bool "data: true" -r 1'/>
+    4  
+    5:   <node pkg="tf" type="static_transform_publisher" name="odom_map_link" args="0 0 1 0 0 0 /krabby/odom /krabby/map 50"/>
+    6    <include file="$(find krabby_description)/launch/krabby_simulation.launch">
+    7      <arg name="isBlue" value="$(arg isBlue)"/>
+
+1 match in 1 file

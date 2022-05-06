@@ -1,8 +1,10 @@
+<?xml version="1.0"?>
 <launch>
   <arg name="isBlue" default="false"/>
   <node pkg="rostopic" type="rostopic" name="tirette"  args='pub /krabby/tirette std_msgs/Bool "data: true" -r 1'/>
 
-  <node pkg="tf" type="static_transform_publisher" name="odom_map_link" args="0 0 1 0 0 0 /krabby/odom /map 50"/>
+  <!--<node pkg="tf" type="static_transform_publisher" name="odom_map_link" args="0 0 -1 0 0 0 /map /krabby/odom  100"/>-->
+
   <include file="$(find krabby_description)/launch/krabby_simulation.launch">
     <arg name="isBlue" value="$(arg isBlue)"/>
   </include>
