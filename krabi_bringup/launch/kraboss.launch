@@ -1,13 +1,16 @@
 <launch>
     <arg name="isBlue" default="false"/>
     <arg name="isSimulation" default="true"/>
+    <arg name="detectWeathercock" default="false"/>
 
     <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
     <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
 
 
     <group if="$(arg isSimulation)">
-    	<include file="$(find aruco_to_pose)/launch/weathercock_detector_only.launch" ns="/krabby">
+        <group if="$(arg detectWeathercock)">
+    	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_only.launch" ns="/krabby">
+        </group>
     	</include>
         <include file="$(find krabi_bringup)/launch/krabossSimu.launch">
             <arg name="isBlue" value="$(arg isBlue)"/>
@@ -16,8 +19,10 @@
         <param name="/use_sim_time" value="true"/>
     </group>
     <group unless="$(arg isSimulation)">
-    	<include file="$(find aruco_to_pose)/launch/weathercock_detector_webcam.launch" ns="/krabby">
-    	</include>
+        <group if="$(arg detectWeathercock)">
+    	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_webcam.launch" ns="/krabby">
+    	    </include>
+        </group>
         <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
 	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
         <group if="$(arg isBlue)">
@@ -28,6 +33,7 @@
         </group>
 
     </group>
+<!--    <node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 /krabby/suction_cup /krabby/base_link 50"/>-->
 
     <include file="$(find krabi_bringup)/launch/krabossMain.launch" ns="/krabby">
         <arg name="isBlue" value="$(arg isBlue)"/>
