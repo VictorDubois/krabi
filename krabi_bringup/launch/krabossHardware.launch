@@ -20,6 +20,7 @@
 <!--    <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
     <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 /krabby/base_link /krabby/neato_laser 50"/>
     <node name="odometry_node" pkg="main_strategy" type="odometry_node"/>
+    <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.102 0. 0.06 0 3.14159 0 /krabby/base_link cloud 100"/>
     <include file="$(find krabi_bringup)/launch/sick_tim_krabi.launch" ns="/krabby">
     </include>
 </launch>
