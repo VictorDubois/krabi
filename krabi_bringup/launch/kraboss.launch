@@ -10,8 +10,8 @@
     <group if="$(arg isSimulation)">
         <group if="$(arg detectWeathercock)">
     	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_only.launch" ns="/krabby">
+    	    </include>
         </group>
-    	</include>
         <include file="$(find krabi_bringup)/launch/krabossSimu.launch">
             <arg name="isBlue" value="$(arg isBlue)"/>
         </include>
