@@ -15,7 +15,7 @@
     <param name="force_update_on_initial_pose" value="true" />
     <remap from="odom" to="/krabby/odom" />
   </node>
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find krabi_bringup)/map_coin.yaml">
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find krabi_bringup)/map_inverted_lidar.yaml">
     <param name="frame_id" value="/map_loc2d"/>
   </node>
 

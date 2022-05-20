@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <launch>
     <node name="gpio_kraboss_node" pkg="gpio_kraboss" type="main.py" />
     <!--<node name="lcd_node" pkg="rosserial_server" type="serial_node.py">
