@@ -3,6 +3,7 @@
     <arg name="isBlue" default="false"/>
     <arg name="isSimulation" default="true"/>
     <arg name="detectWeathercock" default="false"/>
+    <arg name="useLidarLoc" default="false"/>
 
     <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
     <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
@@ -26,12 +27,15 @@
         </group>
         <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
 	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
+        <group unless="$(arg useLidarLoc)">
         <group if="$(arg isBlue)">
             <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.3 0.2 0 0 0 0 /map /krabby/odom 50"/>
         </group>
         <group unless="$(arg isBlue)">
             <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.3 0.2 0 3.1451 0 0 /map /krabby/odom 50"/>
         </group>
+        </group>
+        <node pkg="tf" type="static_transform_publisher" name="map_map" args="0 0 0 0 0 0 /map /map_loc2d 50"/>
 
     </group>
 <!--    <node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 /krabby/suction_cup /krabby/base_link 50"/>-->
