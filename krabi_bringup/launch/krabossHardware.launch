@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="useTimInsteadOfNeato" default="true"/>
+    <arg name="useTimForLoc" default="false"/>
     <node name="gpio_kraboss_node" pkg="gpio_kraboss" type="main.py" />
     <!--<node name="lcd_node" pkg="rosserial_server" type="serial_node.py">
     <param name="port" value="/dev/lcd"/>
@@ -13,15 +15,25 @@
         <param name="port" value="/dev/servos"/>
         <param name="baud" value="57600"/>
     </node>
+    <group if="$(arg useTimInsteadOfNeato)">
+        <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 0 0 1.5708 /krabby/base_link /krabby/tim_top 50"/>
+        <include file="$(find krabi_bringup)/launch/tim_obstacles.launch" ns="/krabby">
+        </include>
+    </group>
+    <group unless="$(arg useTimInsteadOfNeato)">
+    <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 /krabby/base_link /krabby/neato_laser 50"/>
     <node name="neato_laser_publisher" pkg="xv_11_laser_driver" type="neato_laser_publisher">
         <param name="port" value="/dev/lidar"/>
         <param name="baud" value="115200"/>
         <param name="frame_id" value="/krabby/neato_laser"/>
     </node>
+    </group>
 <!--    <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
-    <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 /krabby/base_link /krabby/neato_laser 50"/>
     <node name="odometry_node" pkg="main_strategy" type="odometry_node"/>
     <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.102 0. 0.06 0 3.14159 0 /krabby/base_link cloud 100"/>
-    <include file="$(find krabi_bringup)/launch/sick_tim_krabi.launch" ns="/krabby">
-    </include>
+    
+    <group if="$(arg useTimForLoc)">
+        <include file="$(find krabi_bringup)/launch/tim_loc.launch" ns="/krabby">
+        </include>
+    </group>
 </launch>

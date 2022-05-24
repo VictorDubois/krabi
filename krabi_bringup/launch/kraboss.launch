@@ -4,6 +4,7 @@
     <arg name="isSimulation" default="true"/>
     <arg name="detectWeathercock" default="false"/>
     <arg name="useLidarLoc" default="false"/>
+    <arg name="useTimInsteadOfNeato" default="true"/>
 
     <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
     <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
@@ -25,7 +26,9 @@
     	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_webcam.launch" ns="/krabby">
     	    </include>
         </group>
-        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby"/>
+        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby">
+            <arg name="useTimInsteadOfNeato" value="$(arg useTimInsteadOfNeato)"/>
+        </include>
 	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
         <group unless="$(arg useLidarLoc)">
         <group if="$(arg isBlue)">
