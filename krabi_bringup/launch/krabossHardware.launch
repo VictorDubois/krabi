@@ -16,7 +16,7 @@
         <param name="baud" value="57600"/>
     </node>
     <group if="$(arg useTimInsteadOfNeato)">
-        <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 0 0 1.5708 /krabby/base_link /krabby/tim_top 50"/>
+        <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 1.5708 0 0 /krabby/base_link /krabby/tim_top 50"/>
         <include file="$(find krabi_bringup)/launch/tim_obstacles.launch" ns="/krabby">
         </include>
     </group>
@@ -30,9 +30,9 @@
     </group>
 <!--    <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
     <node name="odometry_node" pkg="main_strategy" type="odometry_node"/>
-    <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.102 0. 0.06 0 3.14159 0 /krabby/base_link cloud 100"/>
     
     <group if="$(arg useTimForLoc)">
+    	<node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.102 0. 0.06 0 3.14159 0 /krabby/base_link cloud 100"/>
         <include file="$(find krabi_bringup)/launch/tim_loc.launch" ns="/krabby">
         </include>
     </group>

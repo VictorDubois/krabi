@@ -20,7 +20,7 @@
 <launch>
     <arg name="hostname" default="192.168.0.17"/>
     <arg name="cloud_topic" default="cloud_loc"/>
-    <arg name="frame_id" default="tim_bottom"/>
+    <arg name="frame_id" default="/krabby/tim_bottom"/>
     <node name="tim_loc" pkg="sick_scan" type="sick_generic_caller" respawn="false" output="screen">
         <!--<param name="robot_description" command="$(find xacro)/xacro.py '$(find sick_scan)/urdf/example.urdf.xacro'" />-->
         <param name="scanner_type" type="string" value="sick_tim_5xx"/>
