@@ -10,7 +10,7 @@
     <param name="global_frame_id" value="/map_loc2d" />
     <param name="odom_frame_id" value="krabby/odom" />
     <param name="base_frame_id" value="/krabby/base_link" />
-    <param name="scan_topic" value="/krabby/scan_tim" />
+    <param name="scan_topic" value="/krabby/scan_loc" />
     <param name="truncate" value="0.2" />
     <param name="create_summary" value="true" />
     <param name="force_update_on_initial_pose" value="true" />
@@ -25,9 +25,9 @@
     <!--mapping mode--> 
     <node name="slam2d_ros" pkg="iris_lama_ros" type="slam2d_ros">
        <param name="global_frame_id" value="map_loc2d" />
-       <param name="odom_frame_id" value="krabby/odom" />
+       <param name="odom_frame_id" value="/krabby/odom" />
        <param name="base_frame_id" value="/krabby/base_link" />
-       <param name="scan_topic" value="/krabby/scan" />
+       <param name="scan_topic" value="/krabby/scan_obstacles" />
        <param name="truncate" value="0.2" />
        <param name="create_summary" value="true" />
        <param name="initial_pos_x" value="0.0" />

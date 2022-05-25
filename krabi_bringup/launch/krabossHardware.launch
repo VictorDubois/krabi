@@ -32,7 +32,7 @@
     <node name="odometry_node" pkg="main_strategy" type="odometry_node"/>
     
     <group if="$(arg useTimForLoc)">
-    	<node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.102 0. 0.06 0 3.14159 0 /krabby/base_link cloud 100"/>
+	    <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.112 0. 0.06 0 3.14159 0 /krabby/base_link /krabby/tim_loc 100"/>
         <include file="$(find krabi_bringup)/launch/tim_loc.launch" ns="/krabby">
         </include>
     </group>
