@@ -1,22 +1,37 @@
 <?xml version="1.0"?>
 
 <launch>
-  <!--loc mode
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+    <rosparam command="load" file="$(find krabi_bringup)/config/my_laser_config.yaml" />
+    <remap from="scan" to="/krabby/scan_tim" />
+  </node>
+
+  <!--loc mode-->
   <node name="loc2d_ros" pkg="iris_lama_ros" type="loc2d_ros">
     <param name="use_map_topic" value="true" />
+    <param name="global_frame_id" value="/map_loc2d" />
+    <param name="odom_frame_id" value="krabby/odom" />
+    <param name="base_frame_id" value="/cloud" />
+    <param name="scan_topic" value="/scan_filtered" />
+    <param name="truncate" value="0.2" />
+    <param name="create_summary" value="true" />
+    <param name="force_update_on_initial_pose" value="true" />
+    <remap from="odom" to="/krabby/odom_with_tf" />
   </node>
-  <node name="map_server" pkg="map_server" type="map_server" args="/home/maxime/catkin_build_ws/src/krabi/map/enfinputin.yaml"/> -->
-<!--mapping mode-->
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/maxime/catkin_build_ws/src/krabi/map/map_coin.yaml">
+    <param name="frame_id" value="/map_loc2d"/>
+  </node>
+
+
+<!--mapping mode
  <node name="slam2d_ros" pkg="iris_lama_ros" type="slam2d_ros">
        <param name="global_frame_id" value="map" />
        <param name="odom_frame_id" value="krabby/odom" />
        <param name="base_frame_id" value="cloud" />
-       <param name="scan_topic" value="/scan" />
+       <param name="scan_topic" value="/krabby/scan_tim" />
        <param name="truncate" value="0.2" />
        <param name="create_summary" value="true" />
        <param name="initial_pos_x" value="0.0" />
     </node>
-
-  <!--<node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.1 0.01 0.06 0 3.14159 0 /map /cloud 100"/>-->
-
+-->
 </launch>
