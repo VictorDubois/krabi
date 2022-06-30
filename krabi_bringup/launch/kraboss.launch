@@ -2,15 +2,19 @@
 <launch>
     <arg name="isBlue" default="false"/>
     <arg name="isSimulation" default="true"/>
+    <arg name="isLogReplay" default="false"/>
+    <arg name="logPath" default="/home/me/ros_files/my_file.bag"/>
+
     <arg name="detectWeathercock" default="false"/>
-    <arg name="useTimForLoc" default="false"/>
+    <arg name="useLidarLoc" default="false"/>
     <arg name="useTimInsteadOfNeato" default="true"/>
     <arg name="justLocNotSlam" default="true"/>
+
 
     <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
     <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
 
-
+    <!--Simulation-->
     <group if="$(arg isSimulation)">
         <group if="$(arg detectWeathercock)">
     	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_only.launch" ns="/krabby">
@@ -22,26 +26,38 @@
         <param name="/strategy/lidar/min_intensity" value="0" />
         <param name="/use_sim_time" value="true"/>
     </group>
+    
     <group unless="$(arg isSimulation)">
-        <group if="$(arg detectWeathercock)">
-    	    <include file="$(find aruco_to_pose)/launch/weathercock_detector_webcam.launch" ns="/krabby">
-    	    </include>
+        <!--Log replay  'topic != \'/tf\'-->
+        <group if="$(arg isLogReplay)">
+            <param name="/use_sim_time" value="true"/>
+            <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(arg logPath) /tf:=/tf_dev_null"/> 
         </group>
-        <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby">
-            <arg name="useTimInsteadOfNeato" value="$(arg useTimInsteadOfNeato)"/>
-            <arg name="useTimForLoc" value="$(arg useTimForLoc)"/>
-        </include>
-	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
-        <group if="$(arg useTimForLoc)">
-		<group if="$(arg justLocNotSlam)">
-		        <node pkg="tf" type="static_transform_publisher" name="map_map" args="0 0 0 0 0 0 /map /map_loc2d 50"/>
-		</group>
-	        <include file="$(find krabi_bringup)/launch/iris_lama.launch" ns="/krabby">
-        	    <arg name="justLocNotSlam" value="$(arg justLocNotSlam)"/>
-	        </include>
 
+
+        <!--Live on Robot-->
+        <group unless="$(arg isLogReplay)"> 
+            <group if="$(arg detectWeathercock)">
+                <include file="$(find aruco_to_pose)/launch/weathercock_detector_webcam.launch" ns="/krabby">
+                </include>
+            </group>
+            <include file="$(find krabi_bringup)/launch/krabossHardware.launch" ns="/krabby">
+                <arg name="useTimInsteadOfNeato" value="$(arg useTimInsteadOfNeato)"/>
+                <arg name="useLidarLoc" value="$(arg useLidarLoc)"/>
+            </include>
         </group>
-        <group unless="$(arg useTimForLoc)">
+
+    	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 /map /krabby/odom 50"/>-->
+        <group if="$(arg useLidarLoc)">
+            <group if="$(arg justLocNotSlam)">
+                <node pkg="tf" type="static_transform_publisher" name="map_map" args="0 0 0 0 0 0 /map /map_loc2d 50"/>
+        	</group>
+        	<include file="$(find krabi_bringup)/launch/iris_lama.launch" ns="/krabby">
+                <arg name="justLocNotSlam" value="$(arg justLocNotSlam)"/>
+        	</include>
+        </group>
+
+        <group unless="$(arg useLidarLoc)">
 	        <group if="$(arg isBlue)">
 	            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.3 0.2 0 0 0 0 /map /krabby/odom 50"/>
 	        </group>
@@ -49,10 +65,8 @@
 	            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.3 0.2 0 3.1451 0 0 /map /krabby/odom 50"/>
 	        </group>
         </group>
-
-
     </group>
-<!--    <node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 /krabby/suction_cup /krabby/base_link 50"/>-->
+<!--<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 /krabby/suction_cup /krabby/base_link 50"/>-->
 
     <include file="$(find krabi_bringup)/launch/krabossMain.launch" ns="/krabby">
         <arg name="isBlue" value="$(arg isBlue)"/>
