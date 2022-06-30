@@ -10,7 +10,7 @@
     <param name="global_frame_id" value="/map_loc2d" />
     <param name="odom_frame_id" value="krabby/odom" />
     <param name="base_frame_id" value="/krabby/base_link" />
-    <param name="scan_topic" value="/krabby/scan_loc" />
+    <param name="scan_topic" value="/scan_loc" />
     <param name="truncate" value="0.2" />
     <param name="create_summary" value="true" />
     <param name="force_update_on_initial_pose" value="true" />
