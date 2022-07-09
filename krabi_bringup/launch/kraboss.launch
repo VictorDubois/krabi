@@ -58,10 +58,15 @@
     	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 map krabby/odom 50"/>-->
         <group if="$(arg useLidarLoc)">
             <group if="$(arg justLocNotSlam)">
-                <node pkg="tf" type="static_transform_publisher" name="map_map" args="0 0 0 0 0 0 map map_loc2d 50"/>
+	        <group if="$(arg isBlue)">
+	            <node pkg="tf" type="static_transform_publisher" name="map_map" args="-1.3 0.2 0 0 0 0 map map_loc2d 50"/>
+	        </group>
+	        <group unless="$(arg isBlue)">
+	            <node pkg="tf" type="static_transform_publisher" name="map_map" args="1.3 0.2 0 3.1451 0 0 map map_loc2d 50"/>
         	</group>
+             </group>
         	<include file="$(find krabi_bringup)/launch/iris_lama.launch" ns="/krabby">
-                <arg name="justLocNotSlam" value="$(arg justLocNotSlam)"/>
+                    <arg name="justLocNotSlam" value="$(arg justLocNotSlam)"/>
         	</include>
         </group>
 
