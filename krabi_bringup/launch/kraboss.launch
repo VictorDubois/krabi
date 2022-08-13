@@ -36,7 +36,8 @@
         <!--Log replay  'topic != \'/tf\'-->
         <group if="$(arg isLogReplay)">
             <param name="/use_sim_time" value="true"/>
-            <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(arg logPath) /krabby/odom:=/odom_dev_null /krabby/initial_pose:=/initpose_dev_null /tf:=/tf_dev_null"/> 
+            <node pkg="rosbag" type="play" name="player" output="screen" args="--clock $(arg logPath) --topics /krabby/odom_light /krabby/scan_loc /krabby/tirette /krabby/vacuum /krabby/scan_obstacles"/> 
+            <!--<node pkg="rosbag" type="play" name="player" output="screen" args="-clock $(arg logPath) /krabby/odom:=/odom_dev_null /krabby/initial_pose:=/initpose_dev_null /tf:=/tf_dev_null /krabby/initialpose:=/initialpose/dev/null"/> -->
             <node type="rviz" name="rviz" pkg="rviz" args="-d $(find krabi_bringup)/rviz/log_replay.rviz" /> -->
         </group>
 
