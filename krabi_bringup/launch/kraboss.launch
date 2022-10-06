@@ -11,8 +11,10 @@
     <arg name="justLocNotSlam" default="true"/>
 
 
-    <rosparam file="$(find krabi_bringup)/config/is_blue.yaml" if="$(arg isBlue)" />
-    <rosparam file="$(find krabi_bringup)/config/is_yellow.yaml" unless="$(arg isBlue)" />
+    <arg name="xRobotPos" default="1"/>
+    <arg name="yRobotPos" default="0.5"/>
+    <arg name="zRobotOrientation" default="0"/>
+
 
     <!--Simulation-->
     <group if="$(arg isSimulation)">
@@ -22,13 +24,22 @@
         </group>
         <include file="$(find krabi_bringup)/launch/krabossSimu.launch">
             <arg name="isBlue" value="$(arg isBlue)"/>
+            <arg name="xRobotPos" value="$(arg xRobotPos)"/>
+            <arg name="yRobotPos" value="$(arg yRobotPos)"/>
+            <arg name="zRobotOrientation" value="$(arg zRobotOrientation)"/>
         </include>
         <param name="/strategy/lidar/min_intensity" value="0" />
         <param name="/use_sim_time" value="true"/>
     </group>
     
     <group unless="$(arg isSimulation)">
-        <node name="odometry_node" pkg="main_strategy" type="odometry_node" ns="/krabby"/>
+        <include file="$(find main_strategy)/launch/odomTFPublisher.launch">
+        
+        <!--<node name="odometry_node" pkg="main_strategy" type="odometry_node" ns="/krabby">-->
+            <arg name="init_pose/x" value="$(arg xRobotPos)"/>
+            <arg name="init_pose/y" value="$(arg yRobotPos)"/>
+            <arg name="init_pose/theta" value="$(arg zRobotOrientation)"/>
+        </include>
         <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 1.5708 0 0 krabby/base_link krabby/tim_top 50"/>
         <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 krabby/base_link krabby/neato_laser 50"/>
         <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.112 0. 0.06 0 3.14159 0 krabby/base_link krabby/tim_bottom 100"/>
@@ -59,6 +70,9 @@
     	<!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 map krabby/odom 50"/>-->
         <group if="$(arg useLidarLoc)">
             <group if="$(arg justLocNotSlam)">
+<!--
+    	        <node pkg="tf" type="static_transform_publisher" name="map_map" args="$(arg /init_pose/x) $(arg init_pose/y) 0 $arg(init_pose/theta) 0 0 map map_loc2d 50"/>
+-->
 	            <node pkg="tf" type="static_transform_publisher" name="map_map" args="-1.3 0.2 0 0 0 0 map map_loc2d 50"/>
             </group>
         	<include file="$(find krabi_bringup)/launch/iris_lama.launch" ns="/krabby">
@@ -67,12 +81,7 @@
         </group>
 
         <group unless="$(arg useLidarLoc)">
-	        <group if="$(arg isBlue)">
-	            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="-1.3 0.2 0 0 0 0 map krabby/odom 50"/>
-	        </group>
-	        <group unless="$(arg isBlue)">
-	            <node pkg="tf" type="static_transform_publisher" name="odom_map" args="1.3 0.2 0 3.1451 0 0 map krabby/odom 50"/>
-	        </group>
+	        <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg xRobotPos) $(arg yRobotPos) 0 $(arg zRobotOrientation) 0 0 map krabby/odom 50"/>
         </group>
     </group>
 <!--<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>-->
