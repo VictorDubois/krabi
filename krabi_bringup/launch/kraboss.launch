@@ -11,7 +11,7 @@
     <arg name="justLocNotSlam" default="true"/>
 
 
-    <arg name="xRobotPos" default="1"/>
+    <arg name="xRobotPos" default="-1"/>
     <arg name="yRobotPos" default="0.5"/>
     <arg name="zRobotOrientation" default="0"/>
 

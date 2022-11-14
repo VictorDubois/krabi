@@ -13,10 +13,8 @@
     <group if="$(arg isBlue)">
         <include file="$(find krabi_bringup)/launch/kraboss.launch">
             <arg name="xRobotPos" value="-1"/>
-            <arg name="yRobotPos" value="0.5"/>
+            <arg name="yRobotPos" value="-0.5"/>
             <arg name="zRobotOrientation" value="0"/>
-        
-
             <arg name="isBlue" default="$(arg isBlue)"/>
             <arg name="isSimulation" default="$(arg isSimulation)"/>
             <arg name="isLogReplay" default="$(arg isLogReplay)"/>
@@ -29,11 +27,9 @@
     </group>
     <group unless="$(arg isBlue)">
         <include file="$(find krabi_bringup)/launch/kraboss.launch">
-            <arg name="xRobotPos" value="1"/>
+            <arg name="xRobotPos" value="-1"/>
             <arg name="yRobotPos" value="0.5"/>
             <arg name="zRobotOrientation" value="0"/>
-    
-
             <arg name="isBlue" default="$(arg isBlue)"/>
             <arg name="isSimulation" default="$(arg isSimulation)"/>
             <arg name="isLogReplay" default="$(arg isLogReplay)"/>
