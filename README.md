@@ -3,6 +3,9 @@
 This is a meta-package, containing the various packages needed for the Krabi/Kraboss robot.
 These packages are git submodules for this packages
 
+# Documentation
+[Have a look at the wiki](https://github.com/VictorDubois/krabi/wiki)
+
 # Clone 
 - go to your catkin workspace's src folder
 - `git clone git@github.com:VictorDubois/krabi.git --recurse-submodules`
