@@ -7,6 +7,7 @@
   <!--loc mode-->
   <node name="loc2d_ros" pkg="iris_lama_ros" type="loc2d_ros">
     <param name="use_map_topic" value="true" />
+    <param name="publish_tf" value="false" />
     <param name="global_frame_id" value="map_loc2d" />
     <param name="odom_frame_id" value="krabby/odom" />
     <param name="base_frame_id" value="krabby/base_link" />
