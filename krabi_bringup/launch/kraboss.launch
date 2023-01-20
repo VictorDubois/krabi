@@ -75,15 +75,16 @@
         	</include>
         </group>
 
-	        <node pkg="tf" type="static_transform_publisher" name="odom_map" args="0 0 0 0 0 0 map_loc2d krabby/odom 50"/>
-        <group unless="$(arg useLidarLoc)">
-	        <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg xRobotPos) $(arg yRobotPos) 0 $(arg zRobotOrientation) 0 0 map krabby/odom 50"/>
             <include file="$(find main_strategy)/launch/odomTFPublisher.launch">
                 <!--<node name="odometry_node" pkg="main_strategy" type="odometry_node" ns="/krabby">-->
                 <arg name="init_pose/x" value="$(arg xRobotPos)"/>
+                <!--<arg name="publish_odom_tf" value="false"/>-->
                 <arg name="init_pose/y" value="$(arg yRobotPos)"/>
                 <arg name="init_pose/theta" value="$(arg zRobotOrientation)"/>
             </include>
+	        <node pkg="tf" type="static_transform_publisher" name="odom_map" args="0 0 0 0 0 0 map_loc2d krabby/odom 50"/>
+        <group unless="$(arg useLidarLoc)">
+	        <node pkg="tf" type="static_transform_publisher" name="odom_map" args="$(arg xRobotPos) $(arg yRobotPos) 0 $(arg zRobotOrientation) 0 0 map krabby/odom 50"/>
         </group>
     </group>
 <!--<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>-->
