@@ -33,7 +33,7 @@
             <arg name="isBlue" default="$(arg isBlue)"/>
             <arg name="isSimulation" default="$(arg isSimulation)"/>
             <arg name="isLogReplay" default="$(arg isLogReplay)"/>
-            <arg name="logPath" default="/home/me/ros_files/my_file.bag"/>
+            <arg name="logPath" default="$(arg logPath)"/>
             <arg name="detectWeathercock" default="$(arg detectWeathercock)"/>
             <arg name="useLidarLoc" default="$(arg useLidarLoc)"/>
             <arg name="useTimInsteadOfNeato" default="$(arg useTimInsteadOfNeato)"/>
