@@ -1,21 +1,32 @@
 <?xml version="1.0"?>
 
 <launch>
-    <!--<arg name="hostname" default="192.168.20.16"/>
-    <node name="tim_loc" pkg="sick_scan" type="sick_generic_caller" respawn="false" output="screen">
-        <param name="sw_pll_only_publish" type="bool" value="true"/>
-	<remap from="scan" to="scan_loc"/>
-    </node>-->
-    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" respawn="false" output="screen">
+
+    <!--<node name="usb_cam" pkg="usb_cam" type="usb_cam_node" respawn="false" output="screen">
         <param name="image_width" type="int" value="1280"/>
         <param name="image_heigth" type="int" value="720"/>
         <param name="framerate" type="int" value="10"/>
         <param name="video_device" type="string" value="/dev/video2"/>
-        <param name="pixel_format" type="string" value="mjpeg"/>
+        <param name="pixel_format" type="string" value="yuyv"/>
+    </node>-->
+
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" respawn="false" output="screen">
+        <param name="image_width" type="int" value="640"/>
+        <param name="image_heigth" type="int" value="480"/>
+        <param name="framerate" type="int" value="10"/>
+        <param name="video_device" type="string" value="/dev/video2"/>
+        <param name="pixel_format" type="string" value="yuyv"/>
+        <!--<remap from="usb_cam" to="/krabby/camera"/>-->
     </node>
+    <!--<node name="camera_calibration" pkg="camera_calibration" type="cameracalibrator.py" respawn="false" output="screen">
+        <param name="size" type="str" value="6x5"/>
+        <param name="square" type="double" value="0.093"/>
+        <param name="image" type="string" value="/usb_cam/image_raw"/>
+        <param name="camera" type="string" value="/usb_cam/camera"/>
+    </node>-->
     <node name="aruco_detect" pkg="aruco_detect" type="aruco_detect" respawn="false" output="screen">
         <param name="dictionary" type="int" value="2"/>
-        <param name="fiducial_len" type="double" value="0.07"/>
+        <param name="fiducial_len" type="double" value="0.03"/>
         <param name="publish_images" type="bool" value="true"/>
 	    <remap from="camera" to="/usb_cam/image_raw"/>
 	    <remap from="camera_info" to="/usb_cam/camera_info"/>
