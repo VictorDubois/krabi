@@ -71,6 +71,9 @@
 	        <!--<node pkg="tf" type="static_transform_publisher" name="odom_map" args="0 0 0 0 0 0 map_loc2d krabby/odom 50"/>--><!--Comment if EKF should publish this-->
             </group>
         	<include file="$(find krabi_bringup)/launch/robot_loc.launch" ns="/krabby">
+                    <arg name="initial_pos_x" value="$(arg xRobotPos)"/>
+                    <arg name="initial_pos_y" value="$(arg yRobotPos)"/>
+                    <arg name="initial_pos_a" value="$(arg zRobotOrientation)"/>
         	</include>
         	<include file="$(find krabi_bringup)/launch/iris_lama.launch" ns="/krabby">
                     <arg name="justLocNotSlam" value="$(arg justLocNotSlam)"/>
