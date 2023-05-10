@@ -6,5 +6,6 @@
   <node name="main_strategy_node" pkg="main_strategy" type="main_strategy_node" />
   <node name="goal_strategy_node" pkg="goal_strategy" type="goal_strategy_node"/>
   <node name="lidar_strategy_node" pkg="lidar_strategy" type="lidar_strategy_node"/>
+  <node pkg="tf" type="static_transform_publisher" name="claws_inside" args="0.2 0 0 0 0 0 krabby/chassis krabby/claws_inside 50"/>
 </launch>
 
