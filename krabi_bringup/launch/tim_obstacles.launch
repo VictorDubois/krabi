@@ -42,6 +42,7 @@
         <param name="timelimit" type="int" value="5"/>
         <param name="sw_pll_only_publish" type="bool" value="true"/>
 	<remap from="scan" to="scan_obstacles"/>
+        <remap from="imu" to="imu_tim_obstacles"/>
     </node>
 </launch>
         <!--
