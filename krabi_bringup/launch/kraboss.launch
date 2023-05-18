@@ -33,9 +33,9 @@
     </group>
     
     <group unless="$(arg isSimulation)">
-        <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 1.5708 0 0 krabby/base_link krabby/tim_top 50"/>
-        <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 krabby/base_link krabby/neato_laser 50"/>
-        <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.112 0. 0.06 0 3.14159 0 krabby/base_link krabby/tim_bottom 10"/>
+        <node pkg="tf" type="static_transform_publisher" name="tim_top_base_link" args="0 0 0.3 1.5708 0 0 krabby/base_link krabby/tim_top 100"/>
+        <node pkg="tf" type="static_transform_publisher" name="neato_base_link" args="0 0 0.3 0 0 0 krabby/base_link krabby/neato_laser 100"/>
+        <node pkg="tf" type="static_transform_publisher" name="baselink_sick" args="-0.112 0. 0.06 0 3.14159 0 krabby/base_link krabby/tim_bottom 100"/>
 
         <!--Log replay  'topic != \'/tf\'-->
         <group if="$(arg isLogReplay)">
