@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+            <remap from="cmd_vel" to="cmd_vel_from_current_pc"/>
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find krabi_bringup)/config/custom_rosconsole.conf"/>  
   <arg name="isBlue" default="false"/>
   <param name="isBlue" value="$(arg isBlue)"/>
