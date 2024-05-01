@@ -35,7 +35,7 @@ def generate_launch_description():
     )
     isSimulation_launch_arg = DeclareLaunchArgument(
         'isSimulation',
-        default_value='true'
+        default_value='True'
     )
     use_lidar_loc_launch_arg = DeclareLaunchArgument(
         'use_lidar_loc',
@@ -116,7 +116,7 @@ def generate_launch_description():
                 ])
             ]),
             launch_arguments={
-                'publish_tf_odom': "true",
+                'publish_tf_odom': "True",
                 'init_pose/x': xRobotPos_value,
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value

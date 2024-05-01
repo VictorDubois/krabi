@@ -10,7 +10,7 @@ from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
-    use_tim_instead_of_neato = LaunchConfiguration('use_tim_instead_of_neato', default='true')
+    use_tim_instead_of_neato = LaunchConfiguration('use_tim_instead_of_neato', default='True')
     use_lidar_loc = LaunchConfiguration('use_lidar_loc', default='False')
 
     neato_laser_publisher_node = Node(
