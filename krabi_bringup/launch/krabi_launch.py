@@ -48,7 +48,7 @@ def generate_launch_description():
         namespace="krabi_ns",
         arguments=["--x", xRobotPos_value, "--y", yRobotPos_value, "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", zRobotOrientation_value,
                     "--child-frame-id", "odom", "--frame-id", "map"],
-        condition=IfCondition(PythonExpression([use_lidar_loc_value, " and not ", isSimulation_value]))
+        condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value, " and not ", isSimulation_value]))
     )
 
     
