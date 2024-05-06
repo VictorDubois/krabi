@@ -10,13 +10,32 @@ from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
-    motors_node = Node(
-        package='krabi_python_serial_broker',
-        executable='simple_stm32_broker.py',
-        name='motors_node',
-        namespace="krabi_ns",
-        parameters=[{'port': '/dev/motors'}, {'baud': 115200}]
+
+    #gpio_kraboss_node = Node(
+    #    package='gpio_kraboss',
+    #    executable='main.py',
+    #    name='gpio_kraboss_node'
+    #)
+
+    motors_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare('krabi_fast_serial_broker'),
+                'launch',
+                'fast_serial_broker_STM32_launch.py'
+            ])
+        ])
     )
+
+    gpio_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare('krabi_gpio'),
+                'launch',
+                'krabi_gpio_launch.py'
+            ])
+        ])
+    ),
 
     servos_node = Node(
         package='krabi_python_serial_broker',
@@ -27,15 +46,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([
-                PathJoinSubstitution([
-                    FindPackageShare('krabi_gpio'),
-                    'launch',
-                    'krabi_gpio_launch.py'
-                ])
-            ])
-        ),
-        motors_node,
+        gpio_launch,
+        motors_launch,
         servos_node
     ])
