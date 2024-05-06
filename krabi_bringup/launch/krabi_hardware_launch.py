@@ -10,12 +10,6 @@ from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
-    #gpio_kraboss_node = Node(
-    #    package='gpio_kraboss',
-    #    executable='main.py',
-    #    name='gpio_kraboss_node'
-    #)
-
     motors_node = Node(
         package='krabi_python_serial_broker',
         executable='simple_stm32_broker.py',
@@ -33,7 +27,15 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        #gpio_kraboss_node,
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('krabi_gpio'),
+                    'launch',
+                    'krabi_gpio_launch.py'
+                ])
+            ])
+        ),
         motors_node,
         servos_node
     ])
