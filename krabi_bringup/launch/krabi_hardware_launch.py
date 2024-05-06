@@ -35,7 +35,7 @@ def generate_launch_description():
                 'krabi_gpio_launch.py'
             ])
         ])
-    ),
+    )
 
     servos_node = Node(
         package='krabi_python_serial_broker',
