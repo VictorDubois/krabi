@@ -41,7 +41,7 @@ def generate_launch_description():
               executable='static_transform_publisher',
               output='both',
               namespace="krabi_ns",
-              arguments=["--x", "0", "--y", "0", "--z", "1", "--roll", "0", "--pitch", "0", "--yaw", "0",
+              arguments=["--x", "0", "--y", "0", "--z", "-1", "--roll", "0", "--pitch", "0", "--yaw", "0",
                          "--child-frame-id", "odom", "--frame-id", "map"]
               )
 
