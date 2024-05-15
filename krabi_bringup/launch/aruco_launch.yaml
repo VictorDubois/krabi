@@ -1,0 +1,27 @@
+launch:
+
+- node:
+    pkg: "opencv_cam"
+    exec: "opencv_cam_main"
+    name: "opencv_cam_main"
+    #namespace: "krabi_ns"
+    param:
+    -
+        name: "camera_info_path"
+        value: "/home/krabi/ws_ros2_aruco/calibration/ost.yaml"
+
+- node:
+    pkg: "aruco_opencv"
+    exec: "aruco_tracker"
+    name: "aruco_tracker"
+    #namespace: "krabi_ns"
+    param:
+    -
+        name: "cam_base_topic"
+        value: "image_raw"
+    -
+        name: "marker_size"
+        value: 0.07
+#still need to launch by hand 
+#ros2 lifecycle set /aruco_tracker configure
+#ros2 lifecycle set /aruco_tracker activate
