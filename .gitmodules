@@ -15,7 +15,7 @@
 	url = git@github.com:VictorDubois/krabi_python_serial_broker.git
 [submodule "krabi_gpio"]
 	path = krabi_gpio
-	url = ./krabi_gpio
+	url = git@github.com:VictorDubois/krabi_gpio.git
 [submodule "krabi_fast_serial_broker"]
 	path = krabi_fast_serial_broker
-	url = ./krabi_fast_serial_broker
+	url = git@github.com:VictorDubois/krabi_fast_serial_broker.git
