@@ -47,5 +47,5 @@ def generate_launch_description():
     return LaunchDescription([
         #neato_laser_publisher_node,
         tim_obstacles_group
-        #,tim_loc_group
+        ,tim_loc_group
     ])

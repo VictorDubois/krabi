@@ -8,6 +8,8 @@ from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution, TextSubstitution
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
+from launch.actions import GroupAction
+from launch_ros.actions import PushRosNamespace
 
 def generate_launch_description():
     isBlue_value = LaunchConfiguration('isBlue')
@@ -33,6 +35,23 @@ def generate_launch_description():
     )
 
     return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
+        GroupAction(
+            actions=[
+                PushRosNamespace('krabi_ns'),
+                IncludeLaunchDescription(
+                    PythonLaunchDescriptionSource([
+                        PathJoinSubstitution([
+                            FindPackageShare('kiss_icp'),
+                            'launch',
+                            'odometry.launch.py'
+                        ])
+                    ])
+                    ,launch_arguments={
+                        'topic': "cloud_loc"
+                    }.items()
+                )
+            ]
+        ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -72,6 +91,4 @@ def generate_launch_description():
                 ])
             ])
         )
-    
-        
     ])

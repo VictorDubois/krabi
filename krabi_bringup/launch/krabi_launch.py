@@ -23,11 +23,11 @@ def generate_launch_description():
     )
     xRobotPos_launch_arg = DeclareLaunchArgument(
         'xRobotPos',
-        default_value='-1.25'
+        default_value='1.25'
     )
     yRobotPos_launch_arg = DeclareLaunchArgument(
         'yRobotPos',
-        default_value='-0.75'
+        default_value='0.75'
     )
     zRobotOrientation_launch_arg = DeclareLaunchArgument(
         'zRobotOrientation',
@@ -69,7 +69,7 @@ def generate_launch_description():
                 'yRobotPos': yRobotPos_value,
                 'zRobotOrientation_value': zRobotOrientation_value
             }.items(),
-                        condition=IfCondition(isSimulation_value)
+            condition=IfCondition(isSimulation_value)
         ),
 
         IncludeLaunchDescription(
@@ -93,8 +93,8 @@ def generate_launch_description():
                     'launch',
                     'transforms_launch.py'
                 ])
-            ]),
-            condition=UnlessCondition(isSimulation_value)
+            ])
+            ,condition=UnlessCondition(isSimulation_value)
         ),
 
         IncludeLaunchDescription(
@@ -124,7 +124,5 @@ def generate_launch_description():
             condition=UnlessCondition(isSimulation_value)
         ) 
     ])
-
-
 
     return launch_description
