@@ -1,0 +1,742 @@
+diff --git a/src/ezbot-v2-simulation/CMakeLists.txt b/src/ezbot-v2-simulation/CMakeLists.txt
+index ef2938a..2a10052 100644
+--- a/src/ezbot-v2-simulation/CMakeLists.txt
++++ b/src/ezbot-v2-simulation/CMakeLists.txt
+@@ -14,6 +14,7 @@ install(
+     DIRECTORY models/
+     DESTINATION $ENV{HOME}/.gz/models/
+ )
++ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/hooks/${PROJECT_NAME}.dsv.in")
+ 
+ 
+-ament_package()
+\ No newline at end of file
++ament_package()
+diff --git a/src/ezbot-v2-simulation/package.xml b/src/ezbot-v2-simulation/package.xml
+index 3165dd3..f5c6c85 100644
+--- a/src/ezbot-v2-simulation/package.xml
++++ b/src/ezbot-v2-simulation/package.xml
+@@ -17,6 +17,7 @@
+   <buildtool_depend>ament_cmake_python</buildtool_depend>
+   <run_depend>ezbot-v2</run_depend>
+   <run_depend>gz_ros2_control</run_depend>
++  <run_depend>ros_gz</run_depend>
+     <export>
+         <build_type>ament_cmake</build_type>
+         <!--
+@@ -25,4 +26,4 @@
+         -->
+     </export>
+ 
+-</package>
+\ No newline at end of file
++</package>
+diff --git a/src/ezbot-v2-simulation/worlds/Table_2025_poteaux.sdf b/src/ezbot-v2-simulation/worlds/Table_2025_poteaux.sdf
+index 5380e54..94027ba 100644
+--- a/src/ezbot-v2-simulation/worlds/Table_2025_poteaux.sdf
++++ b/src/ezbot-v2-simulation/worlds/Table_2025_poteaux.sdf
+@@ -49,29 +49,29 @@
+     <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+     <plugin name='gz::sim::systems::MyPlugin' filename='libgz-match-plugin.so'/>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Table2025</uri>
++      <uri>model://Table2025</uri>
+       <name>Table_2024</name>
+       <pose>0 0 0 0 0 0</pose>
+     </include>
+ 
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/poteau</uri>
++      <uri>model://poteau</uri>
+       <name>Poteau1</name>
+       <pose>+1.594 0 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/poteau</uri>
++      <uri>model://poteau</uri>
+       <name>Poteau2</name>
+       <pose>-1.594 -0.95 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/poteau</uri>
++      <uri>model://poteau</uri>
+       <name>Poteau3</name>
+       <pose>-1.594 0.95 0 0 0 0</pose>
+     </include>
+ 
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/boxboxbox</uri>
++      <uri>model://boxboxbox</uri>
+       <name>THE_box</name>
+       <pose>-0.225 1.161 0 0 0 0</pose>
+     </include>
+diff --git a/src/ezbot-v2-simulation/worlds/Table_2025_with_cans.sdf b/src/ezbot-v2-simulation/worlds/Table_2025_with_cans.sdf
+index 4e31c9a..b0ed385 100644
+--- a/src/ezbot-v2-simulation/worlds/Table_2025_with_cans.sdf
++++ b/src/ezbot-v2-simulation/worlds/Table_2025_with_cans.sdf
+@@ -2,7 +2,7 @@
+   <world name='default'>
+     <gravity>0 0 -9.8000000000000007</gravity>
+     <magnetic_field>6.0000000000000002e-06 2.3e-05 -4.1999999999999998e-05</magnetic_field>
+-    <atmosphere type='adiabatic'/>
++    <atmosphere type='adiabatic' />
+     <physics type='ode'>
+       <max_step_size>0.001</max_step_size>
+       <real_time_factor>1</real_time_factor>
+@@ -16,7 +16,7 @@
+     <audio>
+       <device>default</device>
+     </audio>
+-    <wind/>
++    <wind />
+     <spherical_coordinates>
+       <surface_model>EARTH_WGS84</surface_model>
+       <latitude_deg>0</latitude_deg>
+@@ -35,226 +35,227 @@
+     </state>
+     <gui fullscreen='false'>
+       <camera name='user_camera'>
+-        <pose>10.218299999999999 -3.8406899999999999 5.45038 1.6398205003468891e-17 0.56179699999999999 2.6921900000000001</pose>
++        <pose>10.218299999999999 -3.8406899999999999 5.45038 1.6398205003468891e-17
++          0.56179699999999999 2.6921900000000001</pose>
+         <view_controller>orbit</view_controller>
+         <projection_type>perspective</projection_type>
+       </camera>
+     </gui>
+-    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
++    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system' />
+     <plugin name='gz::sim::systems::Sensors' filename='gz-sim-sensors-system'>
+       <render_engine>ogre2</render_engine>
+     </plugin>
+     <plugin filename="gz-sim-imu-system"
+-        name="gz::sim::systems::Imu">
++      name="gz::sim::systems::Imu">
+     </plugin>
+-    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+-    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
++    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system' />
++    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system' />
+ 
+-    <plugin name='gz::sim::systems::MyPlugin' filename='libgz-match-plugin.so'/>
++    <plugin name='gz::sim::systems::MyPlugin' filename='libgz-match-plugin.so' />
+ 
+ 
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Table2025</uri>
++      <uri>model://Table2025</uri>
+       <name>Table_2024</name>
+       <pose>0 0 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can</name>
+       <pose>-0.25068315155170301 -0.039200628891831263 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_0</name>
+       <pose>-0.35221898728607243 -0.044808617988725208 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_1</name>
+       <pose>-0.45286431464902649 -0.040053838648059226 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_2</name>
+       <pose>-0.55375782697724529 -0.043772160476831024 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_3</name>
+       <pose>-1.452663262827592 0.056330706304445144 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_4</name>
+       <pose>-1.3571504225813884 0.061815657787472167 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_5</name>
+       <pose>-1.2446275068744761 0.059799522911209158 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_6</name>
+       <pose>-1.1523689360883169 0.058553175663850626 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_7</name>
+       <pose>-0.80212478276114441 0.75885762924626721 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_8</name>
+       <pose>-0.70267304298050182 0.75971065021176121 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_9</name>
+       <pose>-0.60636852375048278 0.75455492557296533 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_10</name>
+       <pose>-0.50370230633076374 0.76158001881923987 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_11</name>
+       <pose>0.49610452452074644 0.75907115601275676 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_12</name>
+       <pose>0.59668342499745919 0.76224201638360478 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_13</name>
+       <pose>0.69986482071552669 0.75731162647751327 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_14</name>
+       <pose>0.80188884982676423 0.75301006663356729 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_15</name>
+       <pose>1.4450458324516871 0.052949713359482176 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_16</name>
+       <pose>1.3525390027044639 0.058819312173554628 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_17</name>
+       <pose>1.2488765718869237 0.059764268555141331 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_18</name>
+       <pose>1.1490897807115887 0.056600227747524157 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_19</name>
+       <pose>1.1491197605580346 -0.49120721236000164 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_20</name>
+       <pose>1.2474908669314557 -0.48923291283962544 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_21</name>
+       <pose>1.3479782716996356 -0.48853706522059875 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_22</name>
+       <pose>1.4499048904477614 -0.49165901061792827 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_23</name>
+       <pose>0.8987447743250403 -0.94181928489068178 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_24</name>
+       <pose>0.79691656852453963 -0.94097340225728687 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_25</name>
+       <pose>0.69937529460710279 -0.93653613710692207 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_26</name>
+       <pose>0.59784548754463329 -0.9386851087594642 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_27</name>
+       <pose>-0.60496826110007118 -0.9412447738326809 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_28</name>
+       <pose>-0.70889697603791058 -0.94220421161066492 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_29</name>
+       <pose>-0.79940165883993275 -0.94363686920665568 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_30</name>
+       <pose>-0.89911875851700351 -0.9410330648498898 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_31</name>
+       <pose>-1.1526380797130489 -0.4898348031378511 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_32</name>
+       <pose>-1.2545731218061229 -0.49088168494842621 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_33</name>
+       <pose>-1.3497520965771472 -0.49234995014767413 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_34</name>
+       <pose>-1.4523078807463325 -0.49128988795337009 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_35</name>
+       <pose>0.24415142529954101 -0.041274378529825864 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_36</name>
+       <pose>0.3465572448097064 -0.038499409363570922 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_37</name>
+       <pose>0.44823190867532159 -0.04087312086549863 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_38</name>
+       <pose>0.54120329621512431 -0.039788836595094412 0 0 0 0</pose>
+     </include>
+diff --git a/src/ezbot-v2-simulation/worlds/Table_2025_with_cans_planks.sdf b/src/ezbot-v2-simulation/worlds/Table_2025_with_cans_planks.sdf
+index 4c1c938..8132bb8 100644
+--- a/src/ezbot-v2-simulation/worlds/Table_2025_with_cans_planks.sdf
++++ b/src/ezbot-v2-simulation/worlds/Table_2025_with_cans_planks.sdf
+@@ -49,307 +49,307 @@
+     <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+     <plugin name='gz::sim::systems::MyPlugin' filename='libgz-match-plugin.so'/>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Table2025</uri>
++      <uri>model://Table2025</uri>
+       <name>Table_2024</name>
+       <pose>0 0 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can</name>
+       <pose>-0.25068315155170301 -0.039200628891831263 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_0</name>
+       <pose>-0.35221898728607243 -0.044808617988725208 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_1</name>
+       <pose>-0.45286431464902649 -0.040053838648059226 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_2</name>
+       <pose>-0.55375782697724529 -0.043772160476831024 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_3</name>
+       <pose>-1.452663262827592 0.056330706304445144 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_4</name>
+       <pose>-1.3571504225813884 0.061815657787472167 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_5</name>
+       <pose>-1.2446275068744761 0.059799522911209158 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_6</name>
+       <pose>-1.1523689360883169 0.058553175663850626 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_7</name>
+       <pose>-0.80212478276114441 0.75885762924626721 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_8</name>
+       <pose>-0.70267304298050182 0.75971065021176121 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_9</name>
+       <pose>-0.60636852375048278 0.75455492557296533 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_10</name>
+       <pose>-0.50370230633076374 0.76158001881923987 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_11</name>
+       <pose>0.49610452452074644 0.75907115601275676 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_12</name>
+       <pose>0.59668342499745919 0.76224201638360478 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_13</name>
+       <pose>0.69986482071552669 0.75731162647751327 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_14</name>
+       <pose>0.80188884982676423 0.75301006663356729 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_15</name>
+       <pose>1.4450458324516871 0.052949713359482176 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_16</name>
+       <pose>1.3525390027044639 0.058819312173554628 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_17</name>
+       <pose>1.2488765718869237 0.059764268555141331 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_18</name>
+       <pose>1.1490897807115887 0.056600227747524157 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_19</name>
+       <pose>1.1491197605580346 -0.49120721236000164 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_20</name>
+       <pose>1.2474900484085083 -0.48923298716545105 0.0021717050112783909 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_21</name>
+       <pose>1.3479782716996356 -0.48853706522059875 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_22</name>
+       <pose>1.4499048904477614 -0.49165901061792827 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_23</name>
+       <pose>0.8987447743250403 -0.94181928489068178 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_24</name>
+       <pose>0.79691656852453963 -0.94097340225728687 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_25</name>
+       <pose>0.69937529460710279 -0.93653613710692207 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_26</name>
+       <pose>0.59784548754463329 -0.9386851087594642 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_27</name>
+       <pose>-0.60496826110007118 -0.9412447738326809 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_28</name>
+       <pose>-0.70889697603791058 -0.94220421161066492 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_29</name>
+       <pose>-0.79940165883993275 -0.94363686920665568 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_30</name>
+       <pose>-0.89911875851700351 -0.9410330648498898 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_31</name>
+       <pose>-1.1526380797130489 -0.4898348031378511 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_32</name>
+       <pose>-1.2545731218061229 -0.49088168494842621 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_33</name>
+       <pose>-1.3497520965771472 -0.49234995014767413 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_34</name>
+       <pose>-1.4523078807463325 -0.49128988795337009 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_35</name>
+       <pose>0.24415142529954101 -0.041274378529825864 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_36</name>
+       <pose>0.3465572448097064 -0.038499409363570922 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_37</name>
+       <pose>0.44823190867532159 -0.04087312086549863 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Can</uri>
++      <uri>model://Can</uri>
+       <name>Can_38</name>
+       <pose>0.54120329621512431 -0.039788836595094412 0 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank</name>
+       <pose>-1.3023999929428101 -0.48573699593544006 0.11691617220640182 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_0</name>
+       <pose>-0.75034302473068237 -0.93921798467636108 0.12033747136592865 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_1</name>
+       <pose>-0.40230000019073486 -0.035934299230575562 0.1175709143280983 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_2</name>
+       <pose>-1.3016999959945679 0.061442900449037552 0.11795897036790848 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_3</name>
+       <pose>-0.64987397193908691 0.75768899917602539 0.11852224916219711 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_4</name>
+       <pose>0.65323799848556519 0.75965797901153564 0.11743082851171494 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_5</name>
+       <pose>1.2977800369262695 0.058632299304008484 0.12052788585424423 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_6</name>
+       <pose>1.2961200475692749 -0.4930729866027832 0.11855225265026093 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_7</name>
+       <pose>0.40019199252128601 -0.03542260080575943 0.11728916317224503 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_8</name>
+       <pose>0.74871701002120972 -0.93932002782821655 0.11880471557378769 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_9</name>
+       <pose>-0.75388997793197632 -0.94500702619552612 0.13605232536792755 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_10</name>
+       <pose>-0.4027400016784668 -0.037016831338405609 0.13332000374794006 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_11</name>
+       <pose>-1.2949600219726562 0.061498101800680161 0.13387396931648254 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_12</name>
+       <pose>-0.65046900510787964 0.75871902704238892 0.13319449126720428 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_13</name>
+       <pose>0.65300667285919189 0.75773602724075317 0.13324199616909027 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_14</name>
+       <pose>1.2940399646759033 0.058428201824426651 0.13636486232280731 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_15</name>
+       <pose>1.2997900247573853 -0.49562999606132507 0.13413098454475403 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_16</name>
+       <pose>0.39823400974273682 -0.038625601679086685 0.13363298773765564 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_17</name>
+       <pose>0.74990999698638916 -0.93815100193023682 0.13425500690937042 0 0 0</pose>
+     </include>
+     <include>
+-      <uri>file:///ezbot-v2/install/ezbot-v2-simulation/share/ezbot-v2-simulation/models/Plank</uri>
++      <uri>model://Plank</uri>
+       <name>Plank_18</name>
+       <pose>-1.3017100095748901 -0.48313429951667786 0.13244800269603729 0 0 0</pose>
+     </include>

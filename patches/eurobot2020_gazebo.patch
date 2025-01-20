@@ -1,0 +1,38 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 146c3bd..b232724 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,8 @@
+-cmake_minimum_required(VERSION 3.0.2)
++cmake_minimum_required(VERSION 3.6)
+ project(eurobot2020_gazebo)
+-find_package(catkin REQUIRED)
+-catkin_add_env_hooks(env_variables SHELLS bash zsh DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/env-hooks)
+\ No newline at end of file
++find_package(ament_cmake REQUIRED)
++
++install(DIRECTORY launch models worlds DESTINATION share/${PROJECT_NAME})
++ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/eurobot2020.dsv.in")
++
++ament_package()
+diff --git a/env-hooks/eurobot2020.dsv.in b/env-hooks/eurobot2020.dsv.in
+new file mode 100644
+index 0000000..a767569
+--- /dev/null
++++ b/env-hooks/eurobot2020.dsv.in
+@@ -0,0 +1,2 @@
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/models
++prepend-non-duplicate;GZ_SIM_RESOURCE_PATH;@CMAKE_INSTALL_PREFIX@/share/@PROJECT_NAME@/worlds
+diff --git a/package.xml b/package.xml
+index 3b8585f..e8f8aea 100644
+--- a/package.xml
++++ b/package.xml
+@@ -12,7 +12,7 @@
+ 
+   <depend>gazebo</depend>
+ 
+-  <buildtool_depend>catkin</buildtool_depend>
++  <buildtool_depend>ament_cmake</buildtool_depend>
+ 
+   <export>
+     <gazebo_ros gazebo_model_path="${prefix}/models"/>
