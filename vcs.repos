@@ -1,0 +1,17 @@
+repositories:
+  eurobot2020_gazebo:
+    type: git
+    url: https://github.com/Scout22/eurobot2020_gazebo
+    version: master
+  ezbotv2:
+    type: git
+    url: https://github.com/vincidab/ezbotv2
+    version: main
+  krabi:
+    type: git
+    url: git@github.com:VictorDubois/krabi
+    version: feature/ros2-alaa
+  krabi_description:
+    type: git
+    url: git@github.com:VictorDubois/krabby_description
+    version: feature/ROS2
