@@ -1,0 +1,579 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9242a6b..2a187b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,8 +15,8 @@ find_package(ament_cmake REQUIRED)
+ install(DIRECTORY launch
+   DESTINATION share/${PROJECT_NAME})
+ 
+-install(DIRECTORY urdf
++install(DIRECTORY urdf params
+   DESTINATION share/${PROJECT_NAME})
+ 
+ #ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/env_variables.bash")
+-ament_package()
+\ No newline at end of file
++ament_package()
+diff --git a/README.md b/README.md
+index 1446042..640faf5 100644
+--- a/README.md
++++ b/README.md
+@@ -25,6 +25,14 @@ This project uses [ROS](https://www.ros.org/), [Gazebo](http://gazebosim.org/) a
+ 
+ Clone the project into your ROS workspace, then run ```catkin build```
+ 
++## To view the urdf in Rviz2
++
++```shell
++ros2 launch krabby_description display.launch.xml
++```
++```
++ros2 launch 
++```
+ 
+ ## Usage
+ To start the simulation with default parameter
+diff --git a/launch/display.launch.xml b/launch/display.launch.xml
+new file mode 100644
+index 0000000..9685990
+--- /dev/null
++++ b/launch/display.launch.xml
+@@ -0,0 +1,6 @@
++<launch>
++  <include file="$(find-pkg-share urdf_launch)/launch/display.launch.py">
++    <arg name="urdf_package" value="krabby_description"/>
++    <arg name="urdf_package_path" value="urdf/krabby.xacro"/>
++  </include>
++</launch>
+diff --git a/launch/gz_bridge.launch.xml b/launch/gz_bridge.launch.xml
+new file mode 100644
+index 0000000..25fe270
+--- /dev/null
++++ b/launch/gz_bridge.launch.xml
+@@ -0,0 +1,6 @@
++<launch>
++  <node pkg="ros_gz_bridge" exec="parameter_bridge">
++    <param name="config_file" value="$(find-pkg-share krabby_description)/params/gz_bridge.yaml"/>
++  </node>
++</launch>
++
+diff --git a/launch/spawn.launch.py b/launch/spawn.launch.py
+new file mode 100644
+index 0000000..f81f3ee
+--- /dev/null
++++ b/launch/spawn.launch.py
+@@ -0,0 +1,29 @@
++import launch
++from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
++from launch.substitutions import PathJoinSubstitution
++from launch_ros.substitutions import FindPackageShare
++from launch.launch_description_sources import PythonLaunchDescriptionSource
++import xacro
++from ament_index_python.packages import get_package_share_directory
++import os
++
++def generate_launch_description():
++    pkg = get_package_share_directory("krabby_description")
++    xacro_filepath = os.path.join(pkg, "urdf", "krabby.xacro")
++
++    doc = xacro.process_file(xacro_filepath, mappings={'radius': '0.9'})
++    robot_desc = doc.toprettyxml(indent='  ')
++
++
++    ros_gz_spawn = IncludeLaunchDescription(
++        PythonLaunchDescriptionSource(
++            [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
++                                   'launch',
++                                   'gz_spawn_model.launch.py'])]),
++        launch_arguments=[('model_string', robot_desc)])
++
++
++
++    ld = launch.LaunchDescription()
++    ld.add_action(ros_gz_spawn)
++    return ld
+diff --git a/launch/spawn_and_bridge.launch.py b/launch/spawn_and_bridge.launch.py
+new file mode 100644
+index 0000000..5eee2b1
+--- /dev/null
++++ b/launch/spawn_and_bridge.launch.py
+@@ -0,0 +1,40 @@
++import launch
++from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
++from launch.substitutions import PathJoinSubstitution
++from launch_ros.substitutions import FindPackageShare
++from launch.launch_description_sources import PythonLaunchDescriptionSource
++import xacro
++from ament_index_python.packages import get_package_share_directory
++import os
++
++def get_robot_description_string(pkg):
++    xacro_filepath = os.path.join(pkg, "urdf", "krabby.xacro")
++
++    doc = xacro.process_file(xacro_filepath, mappings={'radius': '0.9'})
++    return doc.toprettyxml(indent='  ')
++
++
++def generate_launch_description():
++    pkg = get_package_share_directory("krabby_description")
++
++    robot_desc = get_robot_description_string(pkg)
++    bridge_config_file = os.path.join(pkg, "params", "gz_bridge.yaml")
++
++    ros_gz_spawn = IncludeLaunchDescription(
++        PythonLaunchDescriptionSource(
++            [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
++                                   'launch',
++                                   'ros_gz_spawn_model.launch.py'])]),
++        launch_arguments=[
++            ('bridge_name', 'gz_bridge'),
++            ('model_string', robot_desc),
++            # ('x', 1.23), # can be used to define the full pose (xyzRPY)
++            ('config_file', bridge_config_file),
++        ])
++
++    # arams/gz_bridge.yaml"/>
++
++
++    ld = launch.LaunchDescription()
++    ld.add_action(ros_gz_spawn)
++    return ld
+diff --git a/package.xml b/package.xml
+index 495dbcc..bad7d9e 100644
+--- a/package.xml
++++ b/package.xml
+@@ -14,6 +14,8 @@
+   <depend>eurobot2020_gazebo</depend>
+   <depend>xacro</depend>
+   <depend>gazebo</depend>
++  <depend>urdf_launch</depend>
++  <depend>launch_xml</depend>
+ 
+   <buildtool_depend>ament_cmake</buildtool_depend>
+   <buildtool_depend>rosidl_default_generators</buildtool_depend>
+diff --git a/params/gz_bridge.yaml b/params/gz_bridge.yaml
+new file mode 100644
+index 0000000..852c046
+--- /dev/null
++++ b/params/gz_bridge.yaml
+@@ -0,0 +1,29 @@
++- gz_topic_name: "/krabby/cmd_vel"
++  ros_topic_name: "/krabby/cmd_vel"
++  gz_type_name: "gz.msgs.Twist"
++  ros_type_name: "geometry_msgs/msg/Twist"
++  direction: ROS_TO_GZ
++
++- gz_topic_name: "/krabby/odom"
++  ros_topic_name: "/krabby/odom"
++  gz_type_name: "gz.msgs.Odometry"
++  ros_type_name: "nav_msgs/msg/Odometry"
++  direction: GZ_TO_ROS
++
++- gz_topic_name: "/model/krabby/tf"
++  ros_topic_name: "/krabby/sim_tf"
++  gz_type_name: "gz.msgs.Pose_V"
++  ros_type_name: "tf2_msgs/msg/TFMessage"
++  direction: GZ_TO_ROS
++
++- gz_topic_name: "/lidar"
++  ros_topic_name: "/krabby/laser"
++  gz_type_name: "gz.msgs.LaserScan"
++  ros_type_name: "sensor_msgs/msg/LaserScan"
++  direction: GZ_TO_ROS
++
++- gz_topic_name: "/lidar/points"
++  ros_topic_name: "/krabby/pointcloud"
++  gz_type_name: "gz.msgs.PointCloudPacked"
++  ros_type_name: "sensor_msgs/msg/PointCloud2"
++  direction: GZ_TO_ROS
+diff --git a/urdf/krabby.gazebo b/urdf/krabby.gazebo
+index 7748ce3..acb84b7 100644
+--- a/urdf/krabby.gazebo
++++ b/urdf/krabby.gazebo
+@@ -6,29 +6,59 @@
+   </gazebo>
+ 
+   <gazebo>
+-    <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+-      <always_on>true</always_on>
+-      <legacy_mode>false</legacy_mode>
+-      <update_rate>20</update_rate>
+-      <left_joint>left_wheel_hinge</left_joint>
+-      <right_joint>right_wheel_hinge</right_joint>
+-      <wheel_separation>${wheelXPos * 2}</wheel_separation>
+-      <wheel_diameter>${wheelRadius * 2}</wheel_diameter>
+-      <torque>20</torque>
+-      <wheel_torque>20</wheel_torque>
+-      <command_topic>/krabby/cmd_vel</command_topic>
+-      <odometry_topic>/krabby/odom</odometry_topic>
+-      <publish_wheel_tf>true</publish_wheel_tf>
+-      <publish_wheel_joint_state>true</publish_wheel_joint_state>
+-      <odometry_frame>odom</odometry_frame>
+-      <robot_base_frame>base_link</robot_base_frame>
+-      <publish_odom_tf>true</publish_odom_tf>
+-      <!--<robotNamespace>krabby</robotNamespace>-->
+-      <!--<ros>
+-        <namespace>/krabby</namespace>
+-      </ros>-->
++      <plugin
++        filename="gz-sim-diff-drive-system"
++        name="gz::sim::systems::DiffDrive">
++        <left_joint>left_wheel_hinge</left_joint>
++        <right_joint>right_wheel_hinge</right_joint>
++        <wheel_separation>${wheelYOffset * 2}</wheel_separation>
++        <wheel_radius>${wheelRadius}</wheel_radius>
++        <odom_publish_frequency>1</odom_publish_frequency>
++        <max_linear_acceleration>1</max_linear_acceleration>
++        <min_linear_acceleration>-1</min_linear_acceleration>
++        <max_angular_acceleration>2</max_angular_acceleration>
++        <min_angular_acceleration>-2</min_angular_acceleration>
++        <max_linear_velocity>0.5</max_linear_velocity>
++        <min_linear_velocity>-0.5</min_linear_velocity>
++        <max_angular_velocity>1</max_angular_velocity>
++        <min_angular_velocity>-1</min_angular_velocity>
+ 
+-    </plugin>
++        <frame_id>odom</frame_id>
++        <child_frame_id>base_link</child_frame_id>
++        <topic>/krabby/cmd_vel</topic>
++        <odom_topic>/krabby/odom</odom_topic>
++      </plugin>
++  </gazebo>
++  
++  <gazebo reference="lidar">
++    <sensor name='gpu_lidar' type='gpu_lidar'>
++      <topic>lidar</topic>
++      <update_rate>10</update_rate>
++      <lidar>
++        <scan>
++          <horizontal>
++            <samples>640</samples>
++            <resolution>1</resolution>
++            <min_angle>-1.396263</min_angle>
++            <max_angle>1.396263</max_angle>
++          </horizontal>
++          <vertical>
++            <samples>16</samples>
++            <resolution>1</resolution>
++            <min_angle>-0.261799</min_angle>
++            <max_angle>0.261799</max_angle>
++          </vertical>
++        </scan>
++        <range>
++          <min>0.08</min>
++          <max>10.0</max>
++          <resolution>0.01</resolution>
++        </range>
++      </lidar>
++      <always_on>true</always_on>
++      <visualize>true</visualize>
++      <gz_frame_id>lidar</gz_frame_id>
++    </sensor>
+   </gazebo>
+ 
+   <!--<gazebo reference="camera_link">
+diff --git a/urdf/krabby.xacro b/urdf/krabby.xacro
+index ce72d7e..a8b17b0 100644
+--- a/urdf/krabby.xacro
++++ b/urdf/krabby.xacro
+@@ -1,66 +1,125 @@
+ <?xml version="1.0"?>
+ <robot name="krabby"
+   xmlns:xacro="http://www.ros.org/wiki/xacro">
+-  <xacro:property name="PI" value="3.1415926535897931"/>
+ 
+-  <xacro:property name="chassisHeight" value="0.005"/>
+-  <xacro:property name="chassisLength" value="0.250"/>
+-  <xacro:property name="chassisWidth" value="0.250"/>
+-  <xacro:property name="chassisMass" value="2"/>
+-
+-  <xacro:property name="wheelWidth" value="0.008"/>
+-  <xacro:property name="wheelRadius" value="0.032"/>
+-  <xacro:property name="wheelXPos" value="0.08"/>
+-  <xacro:property name="wheelMass" value="0.02"/>
+-
+-  <xacro:property name="casterWheelRadius" value="${wheelRadius/2-0.001}"/>
+-  <xacro:property name="casterWheelMass" value="0.01"/>
+-
+-  <xacro:property name="cameraSize" value="0.05"/>
+-  <xacro:property name="cameraMass" value="0.1"/>
+-
+-  <xacro:property name="lidarZPos" value="0.3"/>
+-  <!-- mapping
+-    <xacro:property name="lidarZPos" value="0.06"/>
+-  -->
+-  <xacro:property name="lidarMass" value="0.1"/>
+-  <xacro:property name="lidarRadius" value="0.05"/>
+-  <xacro:property name="lidarHeight" value="0.01"/>
+-
+-  <xacro:property name="arucoSize" value="0.1"/>
+-
+-  <xacro:include filename="krabby.gazebo"/>
++  <xacro:include filename="properties.xacro"/>
+   <xacro:include filename="materials.xacro"/>
++  <xacro:include filename="krabby.gazebo"/>
+   <xacro:include filename="macros.xacro"/>
+ 
+   <link name="base_link"/>
+ 
++  <!-- ************************************************************** -->
++  <!-- chassis                                                        -->
++  <!-- ************************************************************** -->
+   <joint name="base_joint" type="fixed">
+     <parent link="base_link"/>
+     <child link="chassis"/>
++    <origin xyz="0 0 ${chassisDistanceAuSol}" rpy="0 0 0"/>
+   </joint>
+ 
+   <link name='chassis'>
+     <collision>
+-      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+       <geometry>
+         <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+       </geometry>
+     </collision>
+     <visual>
+-      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+       <geometry>
+         <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+       </geometry>
+       <material name="orange"/>
+     </visual>
+     <inertial>
+-      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/>
+       <mass value="${chassisMass}"/>
+       <xacro:box_inertia m="${chassisMass}" x="${chassisLength}" y="${chassisWidth}" z="${chassisHeight}"/>
+     </inertial>
+   </link>
+ 
++  <!-- ************************************************************** -->
++  <!-- body                                                        -->
++  <!-- ************************************************************** -->
++  <joint name="body_joint" type="fixed">
++    <parent link="chassis"/>
++    <child link="body"/>
++    <origin xyz="${bodyOffsetX} ${bodyOffsetY} ${bodyOffsetZ}"/>
++  </joint>
++
++  <link name='body'>
++    <collision>
++      <geometry>
++        <box size="${bodyLength} ${bodyWidth} ${bodyHeight}"/>
++      </geometry>
++    </collision>
++    <visual>
++      <geometry>
++        <box size="${bodyLength} ${bodyWidth} ${bodyHeight}"/>
++      </geometry>
++      <material name="blue"/>
++    </visual>
++    <inertial>
++      <mass value="${bodyMass}"/>
++      <xacro:box_inertia m="${bodyMass}" x="${bodyLength}" y="${bodyWidth}" z="${bodyHeight}"/>
++    </inertial>
++  </link>
++
++  <!-- ************************************************************** -->
++  <!-- wheels                                                      -->
++  <!-- ************************************************************** -->
++  <xacro:wheel lr="left" parent="chassis" tX="${wheelXOffset}" tY="${wheelYOffset}" tZ="${wheelZOffset}"/>
++  <xacro:wheel lr="right" parent="chassis" tX="${wheelXOffset}" tY="${-wheelYOffset}" tZ="${wheelZOffset}"/>
++
++  <xacro:caster_wheel parent="chassis" name="caster_fr" tX="${casterXOffset}" tY="-${casterYOffset}"/>
++  <xacro:caster_wheel parent="chassis" name="caster_fl" tX="${casterXOffset}" tY="${casterYOffset}"/>
++  <xacro:caster_wheel parent="chassis" name="caster_rr" tX="-${casterXOffset}" tY="-${casterYOffset}"/>
++  <xacro:caster_wheel parent="chassis" name="caster_rl" tX="-${casterXOffset}" tY="${casterYOffset}"/>
++
++  <!-- ************************************************************** -->
++  <!-- lidar                                                           -->
++  <!-- ************************************************************** -->
++  <joint name="lidar_joint" type="fixed">
++    <parent link="body"/>
++    <child link="lidar"/>
++    <origin xyz="0 0 ${lidarZPos}"/>
++  </joint>
++
++  <link name='lidar'>
++    <inertial>
++      <mass value="${lidarMass}"/>
++      <xacro:cylinder_inertia m="${lidarMass}" r="${lidarRadius}" h="${lidarHeight}"/>
++    </inertial>
++
++    <!-- No collision on purpose, to not block lidar rays in simulation -->
++
++    <!-- <collision name="lidar_collision"> -->
++    <!--   <pose>0 0 0 0 0 0</pose> -->
++    <!--   <geometry> -->
++    <!--     <cylinder length="${lidarHeight}" radius="${lidarRadius}"/> -->
++    <!--   </geometry> -->
++    <!-- </collision> -->
++
++    <visual name="lidar_visual">
++      <pose>0 0 0 0 0 0</pose>
++      <geometry>
++        <cylinder length="${lidarHeight}" radius="${lidarRadius}"/>
++      </geometry>
++      <material name="black"/>
++    </visual>
++
++  </link>
++
++
++  <!-- ************************************************************** -->
++  <!-- camera                                                           -->
++  <!-- ************************************************************** -->
++
++  <!-- ************************************************************** -->
++  <!-- aruco                                                           -->
++  <!-- ************************************************************** -->
++
++  <!-- ************************************************************** -->
++  <!-- the following is optional, not corrected yet                    -->
++  <!-- ************************************************************** -->
+   <link name="aruco_link">
+     <inertial>
+       <origin xyz="0 0 0" rpy="0 0 0"/>
+@@ -141,17 +200,10 @@
+     </inertial>
+   </link>
+ 
+-  <joint name="tim_top" type="fixed">
++  <joint name="tim_top_joint" type="fixed">
+     <origin xyz="0 0 ${lidarZPos}" rpy="3.14159 0 0"/>
+     <parent link="chassis"/>
+     <child link="tim_top"/>
+   </joint>
+ 
+-  <xacro:caster_wheel name="caster_wheel_upper_right" tX="${chassisLength/2 - 0.03}" tY="${chassisWidth/2 - 0.03}" />
+-  <xacro:caster_wheel name="caster_wheel_upper_left" tX="${-(chassisLength/2 - 0.03)}" tY="${chassisWidth/2 - 0.03}" />
+-  <xacro:caster_wheel name="caster_wheel_lower_right" tX="${chassisLength/2 - 0.03}" tY="${-(chassisWidth/2 - 0.03)}" />
+-  <xacro:caster_wheel name="caster_wheel_lower_left" tX="${-(chassisLength/2 - 0.03)}" tY="${-(chassisWidth/2 - 0.03)}" />
+-
+-  <xacro:wheel lr="left" tY="${wheelXPos}"/>
+-  <xacro:wheel lr="right" tY="${-wheelXPos}"/>
+ </robot>
+diff --git a/urdf/macros.xacro b/urdf/macros.xacro
+index 192c971..1a3b647 100644
+--- a/urdf/macros.xacro
++++ b/urdf/macros.xacro
+@@ -13,7 +13,7 @@
+         <inertia ixx="${2*m*r*r/5}" ixy="0" ixz="0" iyy="${2*m*r*r/5}" iyz="0" izz="${2*m*r*r/5}" />
+     </xacro:macro>
+ 
+-    <xacro:macro name="wheel" params="lr tY">
++    <xacro:macro name="wheel" params="lr parent tX:=0 tY:=0 tZ:=0">
+ 
+         <link name="${lr}_wheel">
+             <collision>
+@@ -52,9 +52,9 @@
+ 
+ 
+         <joint name="${lr}_wheel_hinge" type="continuous">
+-            <parent link="chassis"/>
++            <parent link="${parent}"/>
+             <child link="${lr}_wheel"/>
+-            <origin xyz="0 ${tY} ${wheelRadius}" rpy="0 0 0"/>
++            <origin xyz="${tX} ${tY} ${tZ}" rpy="0 0 0"/>
+             <axis xyz="0 1 0" rpy="0 0 0"/>
+             <limit effort="100" velocity="100"/>
+             <joint_properties damping="0.0" friction="0.0"/>
+@@ -74,17 +74,17 @@
+ 
+     </xacro:macro>
+ 
+-    <xacro:macro name="caster_wheel" params="name tX tY">
++    <xacro:macro name="caster_wheel" params="parent name tX tY">
+         <link name="${name}">
+             <collision>
+-                <origin xyz="${tX} ${tY} ${casterWheelRadius}" rpy="0 0 0"/>
++                <origin xyz="${tX} ${tY} 0" rpy="0 0 0"/>
+                 <geometry>
+                     <sphere radius="${casterWheelRadius}"/>
+                 </geometry>
+             </collision>
+ 
+             <visual>
+-                <origin xyz="${tX} ${tY} ${casterWheelRadius}" rpy="0 0 0"/>
++                <origin xyz="${tX} ${tY} 0" rpy="0 0 0"/>
+                 <geometry>
+                     <sphere radius="${casterWheelRadius}"/>
+                 </geometry>
+@@ -97,8 +97,8 @@
+                 <xacro:sphere_inertia m="${casterWheelMass}" r="${casterWheelRadius}"/>
+             </inertial>
+         </link>
+-        <joint name="${name}" type="fixed">
+-            <parent link="chassis"/>
++        <joint name="${name}_joint" type="fixed">
++            <parent link="${parent}"/>
+             <child link="${name}"/>
+         </joint>
+         <gazebo reference="${name}">
+@@ -107,4 +107,5 @@
+             <material>Gazebo/Red</material>
+         </gazebo>
+     </xacro:macro>
+-</robot>
+\ No newline at end of file
++
++</robot>
+diff --git a/urdf/properties.xacro b/urdf/properties.xacro
+new file mode 100644
+index 0000000..321ee18
+--- /dev/null
++++ b/urdf/properties.xacro
+@@ -0,0 +1,54 @@
++<?xml version="1.0"?>
++<robot name="krabby" xmlns:xacro="http://www.ros.org/wiki/xacro">
++  <xacro:property name="PI" value="3.1415926535897931"/>
++
++  <xacro:property name="chassisDistanceAuSol" value="0.005"/>
++
++  <!-- Chassis -->
++  <xacro:property name="chassisLength" value="0.210"/>
++  <xacro:property name="chassisWidth" value="0.230"/>
++  <xacro:property name="chassisHeight" value="0.004"/>
++
++  <xacro:property name="chassisMass" value="3"/>
++
++  <!-- body -->
++  <xacro:property name="bodyOffsetX" value="-0.020"/>
++  <xacro:property name="bodyOffsetY" value="0.000"/>
++  <xacro:property name="bodyOffsetZ" value="0.150"/>
++
++  <xacro:property name="bodyLength" value="0.170"/>
++  <xacro:property name="bodyWidth" value="0.230"/>
++  <xacro:property name="bodyHeight" value="0.300"/>
++
++  <xacro:property name="bodyMass" value="1"/>
++
++
++  <!-- wheels -->
++  <xacro:property name="wheelWidth" value="0.008"/>
++  <xacro:property name="wheelRadius" value="0.030"/>
++  <xacro:property name="wheelXOffset" value="-0.018"/>
++  <xacro:property name="wheelYOffset" value="0.062"/>
++  <xacro:property name="wheelZOffset" value="0.025"/>
++  <xacro:property name="wheelMass" value="0.02"/>
++
++  <!-- caster wheels -->
++  <xacro:property name="casterXOffset" value="0.100"/>
++  <xacro:property name="casterYOffset" value="0.100"/>
++  <xacro:property name="casterZOffset" value="0.000"/>
++  <xacro:property name="casterWheelRadius" value="0.005"/>
++  <xacro:property name="casterWheelMass" value="0.01"/>
++
++
++  <!-- lidar -->
++  <xacro:property name="lidarZPos" value="0.3"/>
++  <xacro:property name="lidarMass" value="0.1"/>
++  <xacro:property name="lidarRadius" value="0.05"/>
++  <xacro:property name="lidarHeight" value="0.01"/>
++
++  <!-- camera -->
++  <xacro:property name="cameraSize" value="0.05"/>
++  <xacro:property name="cameraMass" value="0.1"/>
++
++  <!-- aruco -->
++  <xacro:property name="arucoSize" value="0.1"/>
++</robot>
