@@ -16,6 +16,7 @@ def generate_launch_description():
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
     isSimulation_value = LaunchConfiguration('isSimulation')
     use_lidar_loc_value = LaunchConfiguration('use_lidar_loc')
+    can_hardware_value = LaunchConfiguration('can_hardware')
     
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
@@ -42,6 +43,11 @@ def generate_launch_description():
         default_value='False'
     )
 
+    can_hardware_launch_arg = DeclareLaunchArgument(
+        'can_hardware',
+        default_value='True'
+    )
+
     odom_map_spawn = Node(package='tf2_ros',
         executable='static_transform_publisher',
         output='both',
@@ -54,7 +60,7 @@ def generate_launch_description():
     
 
     launch_description = LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
-                                            isSimulation_launch_arg, use_lidar_loc_launch_arg, odom_map_spawn,
+                                            isSimulation_launch_arg, use_lidar_loc_launch_arg, can_hardware_launch_arg, odom_map_spawn,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -81,7 +87,8 @@ def generate_launch_description():
                 ])
             ])
             ,launch_arguments={
-                'use_lidar_loc': use_lidar_loc_value
+                'use_lidar_loc': use_lidar_loc_value,
+                'can_hardware': can_hardware_value
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
