@@ -19,3 +19,6 @@
 [submodule "krabi_fast_serial_broker"]
 	path = krabi_fast_serial_broker
 	url = git@github.com:VictorDubois/krabi_fast_serial_broker.git
+[submodule "krabi-can-broker"]
+	path = krabi-can-broker
+	url = git@github.com:VictorDubois/krabi-can-broker.git
