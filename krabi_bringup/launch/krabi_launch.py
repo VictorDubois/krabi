@@ -24,7 +24,7 @@ def generate_launch_description():
     )
     xRobotPos_launch_arg = DeclareLaunchArgument(
         'xRobotPos',
-        default_value='-1.25'
+        default_value='-0.75'
     )
     yRobotPos_launch_arg = DeclareLaunchArgument(
         'yRobotPos',
@@ -54,7 +54,7 @@ def generate_launch_description():
         namespace="krabi_ns",
         arguments=["--x", xRobotPos_value, "--y", yRobotPos_value, "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", zRobotOrientation_value,
                     "--child-frame-id", "odom", "--frame-id", "map"],
-        condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value, " and not ", isSimulation_value]))
+        condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value]))
     )
 
     

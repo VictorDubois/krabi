@@ -36,22 +36,14 @@ def generate_launch_description():
               output='both',
               namespace="krabi_ns",
               )
-    
-    odom_map_spawn = Node(package='tf2_ros',
-              executable='static_transform_publisher',
-              output='both',
-              namespace="krabi_ns",
-              arguments=["--x", "0", "--y", "0", "--z", "-1", "--roll", "0", "--pitch", "0", "--yaw", "0",
-                         "--child-frame-id", "odom", "--frame-id", "map"]
-              )
 
-    return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn, odom_map_spawn,
+    return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
                     FindPackageShare('krabby_description'),
                     'launch',
-                    'krabby_simulation.launch.py'
+                    'spawn_and_bridge.launch.py'
                 ])
             ])
             ,launch_arguments={
