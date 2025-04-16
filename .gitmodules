@@ -22,3 +22,6 @@
 [submodule "krabi-can-broker"]
 	path = krabi-can-broker
 	url = git@github.com:VictorDubois/krabi-can-broker.git
+[submodule "ldlidar"]
+	path = ldlidar
+	url = git@github.com:linorobot/ldlidar.git
