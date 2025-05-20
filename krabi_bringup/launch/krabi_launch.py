@@ -57,6 +57,15 @@ def generate_launch_description():
         condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value]))
     )
 
+    grabi_base_link_spawn = Node(package='tf2_ros',
+        executable='static_transform_publisher',
+        output='both',
+        namespace="krabi_ns",
+        arguments=["--x", "0.2", "--y", "0", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "0",
+                    "--child-frame-id", "grabi", "--frame-id", "base_link"]
+    )
+    #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
+
     
 
     launch_description = LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
