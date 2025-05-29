@@ -61,7 +61,7 @@ def generate_launch_description():
         executable='static_transform_publisher',
         output='both',
         namespace="krabi_ns",
-        arguments=["--x", "0.2", "--y", "0", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "0",
+        arguments=["--x", "0.15", "--y", "0", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "0",
                     "--child-frame-id", "grabi", "--frame-id", "base_link"]
     )
     #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
