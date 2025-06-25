@@ -78,18 +78,19 @@ To run the robot within the simulation do:
 ### 2024
 [Match 5](https://www.youtube.com/live/e8N0uOuQXZI?t=3810s)
 [Match 4](https://www.youtube.com/live/PJYNJFExOm4?si=iLKp-Fqe3UfO6Gs3&t=2072)
-
+[Match 2](https://www.youtube.com/live/8zZkLfBQLeM?si=Owq2L8tC4nwCi5UG&t=3565)
 [Match 1](https://www.youtube.com/live/H6KzbwScAOg?si=vCV4GToK_qwrhpnD&t=2730)
 
 ### 2023
 [Match 5](https://www.youtube.com/watch?v=PNqFieVEhVM&t=1394s)
+[Match 3](https://www.youtube.com/live/gZ_d-zA0fbQ?si=UixXtcgI7DYyCJxr&t=2634)
 [Match 2](https://www.youtube.com/watch?v=PNqFieVEhVM&t=1394s)
 
 ### 2022
 [Match 5](https://www.youtube.com/watch?v=QfEznDc24sY)
 
 ### 2021
-[Match 1](https://www.youtube.com/watch?v=ZFVgK0XuA1k&t=2049s)
+[Match 1](https://www.youtube.com/watch?v=ZFVgK0XuA1k&t=1938s)
 
 ### 2020
 [![Matches Kraboss 2020](Images/Kraboss2020.png)](https://www.youtube.com/watch?v=_Oi5cUh8nhQ&list=PLKfOj1_S1GX3FbhYTOglL9QyVVqv39oAK&index=2)
@@ -98,13 +99,13 @@ To run the robot within the simulation do:
 [![Matches Kraboss 2019](Images/Kraboss2019.png)](https://www.youtube.com/watch?v=ugoAqQ8jtyk&list=PLKfOj1_S1GX3_s_kSwCwgHOziNBIUpHdu&index=4)
 
 ## Historic teams
-### 2017
+### 2017 (4g1c)
 No videos worth showing :'(
 
 ### Krabi - Télécom Bretagne
-[Krabi 2015](https://www.youtube.com/watch?v=12qLPsQLWvM&list=PLKfOj1_S1GX1pSSYhAHeNt8jKM_09mP8X)
+[Krabi 2015](https://www.youtube.com/watch?v=8FZDxJf1kX4&list=PLKfOj1_S1GX2-rUcaLzfm8mEDs_qTDlhd&index=5)
 
-[Krabi 2014](https://www.youtube.com/watch?v=X-3k7NA63vI&list=PLKfOj1_S1GX2-rUcaLzfm8mEDs_qTDlhd)
+[Krabi 2014](https://www.youtube.com/watch?v=12qLPsQLWvM&list=PLKfOj1_S1GX1pSSYhAHeNt8jKM_09mP8X&index=1)
 
 [Krabi 2013](https://www.youtube.com/watch?v=zmZXw1wOLYo&list=PLKfOj1_S1GX0xs9SVw4AWFK5KCqnZ67yk&index=2)
 
