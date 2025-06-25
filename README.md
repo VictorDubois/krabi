@@ -69,28 +69,28 @@ To run the robot within the simulation do:
 # In action
 ## Current team
 ### 2025
-[Match 5](https://www.youtube.com/live/5oetXN7tdYc?si=Os8TLiERuT9G4-z0&t=6761)
+[![Match 5](Images/Krabi2025.png)](https://www.youtube.com/live/5oetXN7tdYc?si=Os8TLiERuT9G4-z0&t=6761)
 [Match 4](https://www.youtube.com/live/fv44r3pMlkQ?si=96i0OfI4LxI49Apz&t=5208)
 [Match 3](https://www.youtube.com/live/l07-lDl3Wkc?si=T8Q6WBRdA1UdYvWr&t=4547)
 [Match 2](https://www.youtube.com/live/dB690W-MNmo?si=-2CfpFBirP8OpQIo&t=2544)
 [Match 1](https://www.youtube.com/live/Eyukl6GLJhc?si=FdVLnM0cjb9-PBAN&t=5005)
 
 ### 2024
-[Match 5](https://www.youtube.com/live/e8N0uOuQXZI?t=3810s)
+[![Match 5](Images/Krabi2024.png)](https://www.youtube.com/live/e8N0uOuQXZI?t=3810s)
 [Match 4](https://www.youtube.com/live/PJYNJFExOm4?si=iLKp-Fqe3UfO6Gs3&t=2072)
 [Match 2](https://www.youtube.com/live/8zZkLfBQLeM?si=Owq2L8tC4nwCi5UG&t=3565)
 [Match 1](https://www.youtube.com/live/H6KzbwScAOg?si=vCV4GToK_qwrhpnD&t=2730)
 
 ### 2023
-[Match 5](https://www.youtube.com/watch?v=PNqFieVEhVM&t=1394s)
+[![Match 5](Images/Krabi2023_2.png)](https://www.youtube.com/watch?v=PNqFieVEhVM&t=1394s)
 [Match 3](https://www.youtube.com/live/gZ_d-zA0fbQ?si=UixXtcgI7DYyCJxr&t=2634)
-[Match 2](https://www.youtube.com/watch?v=PNqFieVEhVM&t=1394s)
+[Match 2](https://www.youtube.com/live/hH7pSExuaw4?si=-FF7S3wx4F7Ug5hc&t=4787)
 
 ### 2022
-[Match 5](https://www.youtube.com/watch?v=QfEznDc24sY)
+[![Match 5](Images/Kraboss2022_2.png)](https://www.youtube.com/watch?v=QfEznDc24sY)
 
 ### 2021
-[Match 1](https://www.youtube.com/watch?v=ZFVgK0XuA1k&t=1938s)
+[![Match 1](Images/Kraboss2021.png)](https://www.youtube.com/watch?v=ZFVgK0XuA1k&t=1938s)
 
 ### 2020
 [![Matches Kraboss 2020](Images/Kraboss2020.png)](https://www.youtube.com/watch?v=_Oi5cUh8nhQ&list=PLKfOj1_S1GX3FbhYTOglL9QyVVqv39oAK&index=2)
