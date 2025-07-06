@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch_ros.substitutions import FindPackageShare
 import os
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -68,7 +68,7 @@ def generate_launch_description():
 
     
 
-    launch_description = LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
+    launch_description = LaunchDescription([ExecuteProcess(cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True), isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
                                             isSimulation_launch_arg, use_lidar_loc_launch_arg, can_hardware_launch_arg, odom_map_spawn, grabi_base_link_spawn,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
