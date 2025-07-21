@@ -107,7 +107,7 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     FindPackageShare('krabi_bringup'),
                     'launch',
-                    'transforms_launch.py'
+                    'transforms_launchKV2.py' # transforms_launch.py for KV1
                 ])
             ]),
             condition=UnlessCondition(isSimulation_value)
