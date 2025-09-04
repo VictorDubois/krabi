@@ -20,6 +20,6 @@ def generate_launch_description():
         )
 
     return LaunchDescription([
-        tim_top_base_link_spawn,
+        LD06_top_base_link_spawn,
         tim_bottom_base_link_spawn
     ])
