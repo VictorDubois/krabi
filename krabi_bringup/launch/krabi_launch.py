@@ -84,7 +84,24 @@ def generate_launch_description():
                 'yRobotPos': yRobotPos_value,
                 'zRobotOrientation_value': zRobotOrientation_value
             }.items(),
-                        condition=IfCondition(isSimulation_value)
+            condition=IfCondition(isSimulation_value)
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('krabi_bringup'),
+                    'launch',
+                    'krabi_amcl.py'
+                ])
+            ])
+            ,launch_arguments={
+                'isBlue': isBlue_value,
+                'xRobotPos': xRobotPos_value,
+                'yRobotPos': yRobotPos_value,
+                'zRobotOrientation_value': zRobotOrientation_value
+            }.items(),
+            condition=IfCondition(use_lidar_loc_value)
         ),
 
         IncludeLaunchDescription(
