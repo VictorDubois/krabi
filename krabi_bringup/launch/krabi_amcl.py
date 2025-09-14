@@ -40,6 +40,10 @@ def generate_launch_description():
                            "map_topic": "/map",
                            "set_initial_pose": True,
                            "base_frame_id": "base_link",
+                           "tf_broadcast": True,
+                           "laser_min_range": 0.3,
+                           "update_min_d": 0.02,
+                           "update_min_a": 0.02,
                            "initial_pose": {
                                 "x": xRobotPos_value,
                                 "y": yRobotPos_value,
