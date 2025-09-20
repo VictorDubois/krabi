@@ -28,8 +28,8 @@ install(
 install(DIRECTORY map
   DESTINATION share/${PROJECT_NAME})
 
-#install(DIRECTORY params
-#  DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY params
+  DESTINATION share/${PROJECT_NAME})
 
 find_package(rclpy REQUIRED)
 
