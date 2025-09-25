@@ -10,9 +10,11 @@ def generate_launch_description():
         namespace="krabi_ns",
         parameters=[{"scanner_type": "sick_tim_5xx"},
                     {'hostname': '192.168.20.16'},
-                    {'frame_id': 'krabby/tim_bottom'},
+                    {'frame_id': 'tim_bottom'},
                     {'laserscan_topic': 'scan_loc'},
-                    {'cloud_topic': "cloud_loc"}],
+                    {'cloud_topic': "cloud_loc"},
+                    {'min_ang': -1.77},
+                    {'max_ang': 2.18}],
         #remappings=[
         #    ('sick_tim_5xx/imu', 'sick_obstacle/imu'),
         #    ('sick_tim_5xx/encoder', 'sick_obstacle/encoder')
