@@ -16,7 +16,7 @@ def generate_launch_description():
         output='both',
         namespace="krabi_ns",
         arguments=["--x", "-0.07", "--y", "0.091", "--z", "0.06", "--roll", "3.14159", "--pitch", "0", "--yaw", "2.35619449",
-                    "--child-frame-id", "tim_lidar_bottom", "--frame-id", "base_link"]
+                    "--child-frame-id", "tim_bottom", "--frame-id", "base_link"]
         )
 
     return LaunchDescription([
