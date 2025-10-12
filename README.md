@@ -40,6 +40,13 @@ To update the submodules, once initialized:
 
 - `git submodule update --recursive`
 
+# Simulation
+
+- `sudo apt-get install ros-${ROS_DISTRO}-ros-gz`
+- Clone this additionnal repository in krabi_workspace/src: https://github.com/VictorDubois/krabby_description 
+
+(It is not in the Krabi meta-package, as it does not run on the real robot)
+
 # Build
 
 ## Install dependencies
@@ -63,7 +70,8 @@ To run the robot within the simulation do:
 
 ## Usefull aliases
 - `alias krabi="source /opt/ros/jazzy/setup.bash && cd <path_to_workspace> && source install/local_setup.bash && export GZ_PARTITION=krabigz && export ROS_DOMAIN_ID=0` 
-- `alias krabiSimu="krabi && gz sim table2025.world"`
+- `alias krabiSimu="krabi && ros2 launch krabby_description spawn_world.py"`
+- `alias krabiSimuFull="krabi && ros2 launch krabby_description spawn_world.py world:=table2026Full.world"`
 - `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=0.275  yRobotPos:=0.775 zRobotOrientation:=-1.570796327"  isBlue:=false`
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
 
