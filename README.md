@@ -24,7 +24,8 @@ These packages are git submodules for this packages
 
 # Clone
 
-- go to your catkin workspace's src folder
+- If you do not already have a ROS 2 workspace, create it: `mkdir -p krabi_workspace/src && cd krabi_workspace/src`
+- go to your workspace's src folder
 - `git clone git@github.com:VictorDubois/krabi.git --recurse-submodules`
 
 If you have just cloned it regularly (without --recurse-submodules),
