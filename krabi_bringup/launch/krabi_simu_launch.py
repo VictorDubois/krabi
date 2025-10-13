@@ -41,7 +41,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
-                    FindPackageShare('krabby_description'),
+                    FindPackageShare('krabi_description'),
                     'launch',
                     'spawn_and_bridge.launch.py'
                 ])
