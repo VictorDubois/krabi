@@ -25,7 +25,7 @@ def generate_launch_description():
     )
     xRobotPos_launch_arg = DeclareLaunchArgument(
         'xRobotPos',
-        default_value='-0.75'
+        default_value='-1.25'
     )
     yRobotPos_launch_arg = DeclareLaunchArgument(
         'yRobotPos',
@@ -33,7 +33,7 @@ def generate_launch_description():
     )
     zRobotOrientation_launch_arg = DeclareLaunchArgument(
         'zRobotOrientation',
-        default_value='0.0'
+        default_value='1.570796327'
     )
     isSimulation_launch_arg = DeclareLaunchArgument(
         'isSimulation',
