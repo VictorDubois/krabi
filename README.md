@@ -53,6 +53,8 @@ To update the submodules, once initialized:
 
 ```shell
 rosdep install --from-paths src -iry
+sudo apt-get install ros-$ROS_DISTRO-diagnostic-updater
+sudo apt install python3-colcon-common-extensions
 ```
 
 ## Compile workspace
