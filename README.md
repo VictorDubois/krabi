@@ -31,8 +31,7 @@ These packages are git submodules for this packages
 If you have just cloned it regularly (without --recurse-submodules),
 you can still init the submodules:
 
-- `git submodule init`
-- `git submodule update --recursive`
+- `git submodule update --init --recursive`
 
 # Update
 
@@ -53,6 +52,8 @@ To update the submodules, once initialized:
 
 ```shell
 rosdep install --from-paths src -iry
+sudo apt-get install ros-$ROS_DISTRO-diagnostic-updater
+sudo apt install python3-colcon-common-extensions
 ```
 
 ## Compile workspace
