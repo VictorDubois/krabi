@@ -71,8 +71,8 @@ To run the robot within the simulation do:
 
 ## Usefull aliases
 - `alias krabi="source /opt/ros/jazzy/setup.bash && cd <path_to_workspace> && source install/local_setup.bash && export GZ_PARTITION=krabigz && export ROS_DOMAIN_ID=0` 
-- `alias krabiSimu="krabi && ros2 launch krabby_description spawn_world.py"`
-- `alias krabiSimuFull="krabi && ros2 launch krabby_description spawn_world.py world:=table2026Full.world"`
+- `alias krabiSimu="krabi && ros2 launch krabi_description spawn_world.py"`
+- `alias krabiSimuFull="krabi && ros2 launch krabi_description spawn_world.py world:=table2026Full.world"`
 - `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=0.275  yRobotPos:=0.775 zRobotOrientation:=-1.570796327"  isBlue:=false`
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
 

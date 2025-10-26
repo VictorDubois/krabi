@@ -41,7 +41,7 @@ gz sim Table_2025_with_cans_planks.sdf
 ### krabby_gazebo
 
 This is a custom package that contains everything needed to run the simulation.
-It depends on krabby_description and the ezBotV2 package.
+It depends on krabi_description and the ezBotV2 package.
 
 To launch the simulation with krabby use:
 
