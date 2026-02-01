@@ -68,13 +68,13 @@ def generate_launch_description():
                 'tim_loc_launch.py'
             ])
         ])
-        ,condition=IfCondition(use_lidar_loc)
+        #,condition=IfCondition(use_lidar_loc)
     )
 
     return LaunchDescription([
         #neato_laser_publisher_node,
         tim_obstacles_group
-        #,tim_loc_group
+        ,tim_loc_group
         ,ldlidar_obstacles_group
         ,ldlidar_tim_spawn
     ])
