@@ -17,7 +17,8 @@ def generate_launch_description():
     isSimulation_value = LaunchConfiguration('isSimulation')
     use_lidar_loc_value = LaunchConfiguration('use_lidar_loc')
     can_hardware_value = LaunchConfiguration('can_hardware')
-    
+    do_record_value = LaunchConfiguration('do_record')
+
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
         default_value='False'
@@ -48,6 +49,11 @@ def generate_launch_description():
         default_value='True'
     )
 
+    do_record_launch_arg = DeclareLaunchArgument(
+        'do_record',
+        default_value='False'
+    )
+
     odom_map_spawn = Node(package='tf2_ros',
         executable='static_transform_publisher',
         output='both',
@@ -66,10 +72,13 @@ def generate_launch_description():
     )
     #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
 
-    
+    record = ExecuteProcess(condition=IfCondition(do_record_value),
+        cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True,
+    )
 
-    launch_description = LaunchDescription([ExecuteProcess(cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True), isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
+    launch_description = LaunchDescription([record, do_record_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
                                             isSimulation_launch_arg, use_lidar_loc_launch_arg, can_hardware_launch_arg, odom_map_spawn, grabi_base_link_spawn,
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -84,7 +93,7 @@ def generate_launch_description():
                 'yRobotPos': yRobotPos_value,
                 'zRobotOrientation_value': zRobotOrientation_value
             }.items(),
-                        condition=IfCondition(isSimulation_value)
+            condition=IfCondition(isSimulation_value)
         ),
 
         IncludeLaunchDescription(
