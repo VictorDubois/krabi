@@ -10,6 +10,23 @@ from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 
 def generate_launch_description():
+    xRobotPos_value = LaunchConfiguration('xRobotPos')
+    yRobotPos_value = LaunchConfiguration('yRobotPos')
+    zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
+
+    xRobotPos_launch_arg = DeclareLaunchArgument(
+        'xRobotPos',
+        default_value='1.25'
+    )
+    yRobotPos_launch_arg = DeclareLaunchArgument(
+        'yRobotPos',
+        default_value='0.5'
+    )
+    zRobotOrientation_launch_arg = DeclareLaunchArgument(
+        'zRobotOrientation',
+        default_value='0.0'
+    )
+
     can_hardware_value = LaunchConfiguration('can_hardware')
     
     can_hardware_launch_arg = DeclareLaunchArgument(
@@ -61,6 +78,12 @@ def generate_launch_description():
                 'can_broker_stm32_launch.py'
             ])
         ])
+        ,launch_arguments={
+            'publish_tf_odom': "True",
+            'init_pose/x': xRobotPos_value,
+            'init_pose/y': yRobotPos_value,
+            'init_pose/theta': zRobotOrientation_value
+        }.items()
         ,condition=IfCondition(can_hardware_value)
     )
 
@@ -81,5 +104,8 @@ def generate_launch_description():
         servos_node,
         motors_can_launch,
         actuators_can_launch,
-        can_hardware_launch_arg
+        can_hardware_launch_arg,
+        xRobotPos_launch_arg,
+        yRobotPos_launch_arg,
+        zRobotOrientation_launch_arg,
     ])

@@ -97,7 +97,10 @@ def generate_launch_description():
             ])
             ,launch_arguments={
                 'use_lidar_loc': use_lidar_loc_value,
-                'can_hardware': can_hardware_value
+                'can_hardware': can_hardware_value,
+                'init_pose/x': xRobotPos_value,
+                'init_pose/y': yRobotPos_value,
+                'init_pose/theta': zRobotOrientation_value
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
@@ -137,7 +140,7 @@ def generate_launch_description():
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value
             }.items(),
-            condition=UnlessCondition(isSimulation_value)
+            condition=UnlessCondition("True")#isSimulation_value)
         ) 
     ])
 
