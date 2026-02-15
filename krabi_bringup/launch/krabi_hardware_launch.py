@@ -98,14 +98,39 @@ def generate_launch_description():
         ,condition=IfCondition(can_hardware_value)
     )
 
+    usb_camera_node = Node(
+        package='usb_cam',
+        executable='usb_cam_node_exe',
+        name='usb_cam_node',
+        output='screen',
+        namespace="krabi_ns",
+        remappings=[
+            ('camera_info', 'krabi_cam/camera_info'),
+            ('image_raw', 'krabi_cam/image_raw')
+    ])
+
+    camera_ros_node = Node(
+        package='camera_ros',
+        executable='camera_node',
+        name='camera_node',
+        output='screen',
+        namespace="krabi_ns",
+        remappings=[
+            ('camera/camera_info', 'krabi_cam/camera_info'),
+            ('camera/image_raw', 'krabi_cam/image_raw')
+    ])
+
     return LaunchDescription([
+        can_hardware_launch_arg,
+        xRobotPos_launch_arg,
+        yRobotPos_launch_arg,
+        zRobotOrientation_launch_arg,
+
         gpio_launch,
         motors_launch,
         servos_node,
         motors_can_launch,
         actuators_can_launch,
-        can_hardware_launch_arg,
-        xRobotPos_launch_arg,
-        yRobotPos_launch_arg,
-        zRobotOrientation_launch_arg,
+        #usb_camera_node,
+        camera_ros_node
     ])
