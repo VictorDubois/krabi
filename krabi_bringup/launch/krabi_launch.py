@@ -101,6 +101,23 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     FindPackageShare('krabi_bringup'),
                     'launch',
+                    'krabi_amcl.py'
+                ])
+            ])
+            ,launch_arguments={
+                'isBlue': isBlue_value,
+                'xRobotPos': xRobotPos_value,
+                'yRobotPos': yRobotPos_value,
+                'zRobotOrientation_value': zRobotOrientation_value
+            }.items(),
+            condition=IfCondition(use_lidar_loc_value)
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('krabi_bringup'),
+                    'launch',
                     'krabi_hardware_launch.py'
                 ])
             ])
