@@ -18,6 +18,7 @@ def generate_launch_description():
     use_lidar_loc_value = LaunchConfiguration('use_lidar_loc')
     can_hardware_value = LaunchConfiguration('can_hardware')
     do_record_value = LaunchConfiguration('do_record')
+    use_aruco_value = LaunchConfiguration('use_aruco')
 
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
@@ -54,6 +55,11 @@ def generate_launch_description():
         default_value='False'
     )
 
+    use_aruco_launch_arg = DeclareLaunchArgument(
+        'use_aruco',
+        default_value='True'
+    )
+
     odom_map_spawn = Node(package='tf2_ros',
         executable='static_transform_publisher',
         output='both',
@@ -78,8 +84,9 @@ def generate_launch_description():
         cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True,
     )
 
-    launch_description = LaunchDescription([do_record_launch_arg, record, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
-                                            isSimulation_launch_arg, use_lidar_loc_launch_arg, can_hardware_launch_arg, odom_map_spawn, grabi_base_link_spawn,
+    launch_description = LaunchDescription([do_record_launch_arg, use_aruco_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, 
+                                            zRobotOrientation_launch_arg, isSimulation_launch_arg, use_lidar_loc_launch_arg, 
+                                            can_hardware_launch_arg, odom_map_spawn, grabi_base_link_spawn, record, 
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
@@ -116,6 +123,19 @@ def generate_launch_description():
 
             }.items(),
             condition=IfCondition(use_lidar_loc_value)
+        ),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('krabi_bringup'),
+                    'launch',
+                    'krabi_aruco.py'
+                ])
+            ])
+            ,launch_arguments={
+            }.items(),
+            condition=IfCondition(use_aruco_value)
         ),
 
         IncludeLaunchDescription(

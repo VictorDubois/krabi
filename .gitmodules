@@ -25,3 +25,6 @@
 [submodule "ldlidar"]
 	path = ldlidar
 	url = git@github.com:VictorDubois/ldlidar.git
+[submodule "ros2_aruco"]
+	path = ros2_aruco
+	url = git@github.com:VictorDubois/ros2_aruco.git

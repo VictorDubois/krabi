@@ -19,7 +19,16 @@ def generate_launch_description():
                     "--child-frame-id", "tim_bottom", "--frame-id", "base_link"]
         )
 
+    camera_base_link_spawn = Node(package='tf2_ros',
+        executable='static_transform_publisher',
+        output='both',
+        namespace="krabi_ns",
+        arguments=["--x", "0.0", "--y", "0.15", "--z", "0.30", "--roll", "0", "--pitch", "1.57", "--yaw", "1.57",
+                    "--child-frame-id", "camera_link", "--frame-id", "base_link"]
+        )
+
     return LaunchDescription([
         LD06_top_base_link_spawn,
-        tim_bottom_base_link_spawn
+        tim_bottom_base_link_spawn,
+        camera_base_link_spawn
     ])
