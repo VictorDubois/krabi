@@ -14,7 +14,8 @@ def generate_launch_description():
     xRobotPos_value = LaunchConfiguration('xRobotPos')
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
-    
+    use_sim_time_value = LaunchConfiguration('use_sim_time')
+
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
         default_value='False'
@@ -31,8 +32,11 @@ def generate_launch_description():
         'zRobotOrientation',
         default_value='0.0'
     )
-
-    return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
+    use_sim_time_launch_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='False'
+    )
+    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -45,7 +49,8 @@ def generate_launch_description():
                 'isBlue': isBlue_value,
                 'xRobotPos': xRobotPos_value,
                 'yRobotPos': yRobotPos_value,
-                'zRobotOrientation_value': zRobotOrientation_value
+                'zRobotOrientation_value': zRobotOrientation_value,
+                "use_sim_time": use_sim_time_value
             }.items()
         ),
         IncludeLaunchDescription(
@@ -60,7 +65,8 @@ def generate_launch_description():
                 'isBlue': isBlue_value,
                 'xRobotPos': xRobotPos_value,
                 'yRobotPos': yRobotPos_value,
-                'zRobotOrientation_value': zRobotOrientation_value
+                'zRobotOrientation_value': zRobotOrientation_value,
+                "use_sim_time": use_sim_time_value
             }.items()
         ),
         IncludeLaunchDescription(
@@ -70,7 +76,10 @@ def generate_launch_description():
                     'launch',
                     'lidar_strat_launch.py'
                 ])
-            ])
+            ]),
+            launch_arguments={
+                "use_sim_time": use_sim_time_value
+            }.items()
         )
     
         

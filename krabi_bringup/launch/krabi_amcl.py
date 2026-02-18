@@ -14,6 +14,8 @@ def generate_launch_description():
     xRobotPos_value = LaunchConfiguration('xRobotPos')
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
+    tfFromAmcl_value = LaunchConfiguration('tfFromAmcl')
+    use_sim_time_value = LaunchConfiguration('use_sim_time')
     
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
@@ -31,6 +33,15 @@ def generate_launch_description():
         'zRobotOrientation',
         default_value='0.0'
     )
+    tfFromAmcl_launch_arg = DeclareLaunchArgument(
+        'tfFromAmcl',
+        default_value='False'
+    )
+
+    use_sim_time_launch_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='False'
+    )
 
 
     amcl_spawn = Node(package='nav2_amcl',
@@ -41,7 +52,7 @@ def generate_launch_description():
                            "map_topic": "/map",
                            "set_initial_pose": True,
                            "base_frame_id": "base_link",
-                           "tf_broadcast": False, #True si on veut utiliser la loc lidar sans EKF
+                           "tf_broadcast": tfFromAmcl_value, #True si on veut utiliser la loc lidar sans EKF
                            "laser_min_range": 0.3,
                            "update_min_d": 0.02,
                            "update_min_a": 0.02,
@@ -50,7 +61,8 @@ def generate_launch_description():
                                 "y": yRobotPos_value,
                                 "z": 0.0,
                                 "yaw": zRobotOrientation_value
-                            }}]
+                            },
+                            "use_sim_time": use_sim_time_value}],
               )
     
     robot_localization_spawn = Node(package='robot_localization',
@@ -61,9 +73,10 @@ def generate_launch_description():
                                  0.0,  0.0,  zRobotOrientation_value,
                                  0.0,  0.0,  0.0,
                                  0.0,  0.0,  0.0,
-                                 0.0,  0.0,  0.0]}
+                                 0.0,  0.0,  0.0],
+                            "use_sim_time": use_sim_time_value}
                             ,PathJoinSubstitution([FindPackageShare('krabi_bringup'), 'params', 'ekf_template_krabi.yaml'])
-                        ]
+                        ],
               )
 
     map_server_spawn = Node(package='nav2_map_server',
@@ -71,14 +84,17 @@ def generate_launch_description():
               output='both',
               namespace="krabi_ns",
               parameters=[{'yaml_filename': os.path.join(get_package_share_directory("krabi_bringup"), 'map','pixel_art_2026.yaml'),
-                            "topic_name": "/map"}],
+                            "topic_name": "/map",
+                            "use_sim_time": use_sim_time_value
+                         }],
               )
     
     lifecycle_autostart_spawn = Node(package='nav2_lifecycle_manager',
               executable='lifecycle_manager',
               output='both',
               namespace="krabi_ns",
-              parameters=[{'node_names': ["map_server", "amcl"], "autostart": True}]
+              parameters=[{'node_names': ["map_server", "amcl"], "autostart": True,
+              "use_sim_time": use_sim_time_value}],
               )
 
-    return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, amcl_spawn,map_server_spawn, lifecycle_autostart_spawn, robot_localization_spawn])
+    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tfFromAmcl_launch_arg, amcl_spawn,map_server_spawn, lifecycle_autostart_spawn, robot_localization_spawn])
