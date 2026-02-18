@@ -60,7 +60,8 @@ def generate_launch_description():
         namespace="krabi_ns",
         arguments=["--x", xRobotPos_value, "--y", yRobotPos_value, "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", zRobotOrientation_value,
                     "--child-frame-id", "odom", "--frame-id", "map"],
-        condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value]))
+        condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value])),
+        parameters=[{"use_sim_time": isSimulation_value}]
     )
 
     grabi_base_link_spawn = Node(package='tf2_ros',
@@ -68,7 +69,8 @@ def generate_launch_description():
         output='both',
         namespace="krabi_ns",
         arguments=["--x", "0.17", "--y", "0", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "0",
-                    "--child-frame-id", "grabi", "--frame-id", "base_link"]
+                    "--child-frame-id", "grabi", "--frame-id", "base_link"],
+        parameters=[{"use_sim_time": isSimulation_value}]
     )
     #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
 
@@ -91,7 +93,8 @@ def generate_launch_description():
                 'isBlue': isBlue_value,
                 'xRobotPos': xRobotPos_value,
                 'yRobotPos': yRobotPos_value,
-                'zRobotOrientation_value': zRobotOrientation_value
+                'zRobotOrientation_value': zRobotOrientation_value,
+                "use_sim_time": isSimulation_value
             }.items(),
             condition=IfCondition(isSimulation_value)
         ),
@@ -108,7 +111,9 @@ def generate_launch_description():
                 'isBlue': isBlue_value,
                 'xRobotPos': xRobotPos_value,
                 'yRobotPos': yRobotPos_value,
-                'zRobotOrientation_value': zRobotOrientation_value
+                'zRobotOrientation_value': zRobotOrientation_value,
+                "use_sim_time": isSimulation_value
+
             }.items(),
             condition=IfCondition(use_lidar_loc_value)
         ),
@@ -126,7 +131,8 @@ def generate_launch_description():
                 'can_hardware': can_hardware_value,
                 'init_pose/x': xRobotPos_value,
                 'init_pose/y': yRobotPos_value,
-                'init_pose/theta': zRobotOrientation_value
+                'init_pose/theta': zRobotOrientation_value,
+                "use_sim_time": isSimulation_value
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
@@ -139,7 +145,10 @@ def generate_launch_description():
                     'transforms_launchKV2.py' # transforms_launch.py for KV1
                 ])
             ]),
-            condition=UnlessCondition(isSimulation_value)
+            condition=UnlessCondition(isSimulation_value),
+            launch_arguments={
+                "use_sim_time": isSimulation_value
+            }.items()
         ),
 
         IncludeLaunchDescription(
@@ -149,7 +158,10 @@ def generate_launch_description():
                     'launch',
                     'krabi_main_launch.py'
                 ])
-            ])
+            ]),
+            launch_arguments={
+                "use_sim_time": isSimulation_value
+            }.items()
         ),
 
         IncludeLaunchDescription(
@@ -164,7 +176,8 @@ def generate_launch_description():
                 'publish_tf_odom': "True",
                 'init_pose/x': xRobotPos_value,
                 'init_pose/y': yRobotPos_value,
-                'init_pose/theta': zRobotOrientation_value
+                'init_pose/theta': zRobotOrientation_value,
+                "use_sim_time": isSimulation_value
             }.items(),
             condition=UnlessCondition("True")#isSimulation_value)
         ) 

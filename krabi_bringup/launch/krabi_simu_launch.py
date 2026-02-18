@@ -13,7 +13,8 @@ def generate_launch_description():
     xRobotPos_value = LaunchConfiguration('xRobotPos')
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
-    
+    use_sim_time_value = LaunchConfiguration('use_sim_time')
+
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
         default_value='False'
@@ -30,7 +31,10 @@ def generate_launch_description():
         'zRobotOrientation',
         default_value='0.0'
     )
-
+    use_sim_time_launch_arg = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='False'
+    )
     tirette_spawn = Node(package='krabi_bringup',
               executable='tirette.py',
               output='both',
@@ -38,7 +42,7 @@ def generate_launch_description():
               parameters=[{"use_sim_time": use_sim_time_value}]
               )
 
-    return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
+    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
@@ -51,7 +55,8 @@ def generate_launch_description():
                 'isBlue': isBlue_value,
                 'xRobotPos': xRobotPos_value,
                 'yRobotPos': yRobotPos_value,
-                'zRobotOrientation_value': zRobotOrientation_value
+                'zRobotOrientation_value': zRobotOrientation_value,
+                "use_sim_time": use_sim_time_value
             }.items()
         )
     ])
