@@ -53,8 +53,8 @@ def generate_launch_description():
                            "set_initial_pose": True,
                            "base_frame_id": "base_link",
                            "tf_broadcast": tfFromAmcl_value, #True si on veut utiliser la loc lidar sans EKF
-                           "laser_min_range": 0.3,
-                           "update_min_d": 0.02,
+                           "laser_min_range": 0.05,
+                           "update_min_d": 0.003,
                            "update_min_a": 0.02,
                            "initial_pose": {
                                 "x": xRobotPos_value,
