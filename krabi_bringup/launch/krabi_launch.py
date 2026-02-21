@@ -173,13 +173,13 @@ def generate_launch_description():
                 ])
             ]),
             launch_arguments={
-                'publish_tf_odom': "True",
+                'publish_tf_odom': "False",
                 'init_pose/x': xRobotPos_value,
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value,
                 "use_sim_time": isSimulation_value
             }.items(),
-            condition=UnlessCondition("True")#isSimulation_value)
+            condition=IfCondition(isSimulation_value)
         ) 
     ])
 
