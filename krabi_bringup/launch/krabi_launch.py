@@ -57,7 +57,7 @@ def generate_launch_description():
 
     use_aruco_launch_arg = DeclareLaunchArgument(
         'use_aruco',
-        default_value='True'
+        default_value='False'
     )
 
     odom_map_spawn = Node(package='tf2_ros',
@@ -152,7 +152,8 @@ def generate_launch_description():
                 'init_pose/x': xRobotPos_value,
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value,
-                "use_sim_time": isSimulation_value
+                "use_sim_time": isSimulation_value,
+                "use_aruco": use_aruco_value
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
