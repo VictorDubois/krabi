@@ -13,6 +13,7 @@ def generate_launch_description():
     xRobotPos_value = LaunchConfiguration('xRobotPos')
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
+    use_aruco_value = LaunchConfiguration('use_aruco')
 
     xRobotPos_launch_arg = DeclareLaunchArgument(
         'xRobotPos',
@@ -25,6 +26,10 @@ def generate_launch_description():
     zRobotOrientation_launch_arg = DeclareLaunchArgument(
         'zRobotOrientation',
         default_value='0.0'
+    )
+    use_aruco_launch_arg = DeclareLaunchArgument(
+        'use_aruco',
+        default_value="False"
     )
 
     can_hardware_value = LaunchConfiguration('can_hardware')
@@ -117,14 +122,16 @@ def generate_launch_description():
         namespace="krabi_ns",
         remappings=[
             ('camera/camera_info', 'krabi_cam/camera_info'),
-            ('camera/image_raw', 'krabi_cam/image_raw')
-    ])
+            ('camera/image_raw', 'krabi_cam/image_raw')],
+        condition=IfCondition(use_aruco_value)
+    )
 
     return LaunchDescription([
         can_hardware_launch_arg,
         xRobotPos_launch_arg,
         yRobotPos_launch_arg,
         zRobotOrientation_launch_arg,
+        use_aruco_launch_arg,
 
         gpio_launch,
         motors_launch,
