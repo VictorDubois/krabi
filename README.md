@@ -52,7 +52,7 @@ To update the submodules, once initialized:
 Go to the workspace (krabi_workspace), then:
 
 ```shell
-rosdep install --from-paths src -iry
+rosdep install --from-paths src -y --ignore-src  --skip-keys="krabilib"
 sudo apt-get install ros-$ROS_DISTRO-diagnostic-updater
 sudo apt install python3-colcon-common-extensions
 ```
