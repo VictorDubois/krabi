@@ -35,7 +35,7 @@ def generate_launch_description():
     )
     tfFromAmcl_launch_arg = DeclareLaunchArgument(
         'tfFromAmcl',
-        default_value='False'
+        default_value='True'
     )
 
     use_sim_time_launch_arg = DeclareLaunchArgument(
@@ -48,14 +48,23 @@ def generate_launch_description():
               executable='amcl',
               output='both',
               namespace="krabi_ns",
-              parameters=[{"scan_topic": 'scan_loc',
+              parameters=[{ "z_rand": 0.05, 
+                            "z_hit": 0.95,
+                            "sigma_hit" : 0.005,
+                            "min_particles": 500,
+                            "max_beams": 300,
+                            "alpha1": 0.01,
+                           "alpha2": 0.01,
+                           "alpha3": 0.01,
+                           "alpha4": 0.01,
+                           "scan_topic": 'scan_loc',
                            "map_topic": "/map",
                            "set_initial_pose": True,
                            "base_frame_id": "base_link",
                            "tf_broadcast": tfFromAmcl_value, #True si on veut utiliser la loc lidar sans EKF
                            "laser_min_range": 0.05,
-                           "update_min_d": 0.003,
-                           "update_min_a": 0.02,
+                           "update_min_d": 0.0001,
+                           "update_min_a": 0.0001,
                            "initial_pose": {
                                 "x": xRobotPos_value,
                                 "y": yRobotPos_value,
