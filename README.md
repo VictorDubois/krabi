@@ -49,6 +49,7 @@ To update the submodules, once initialized:
 # Build
 
 ## Install dependencies
+Go to the workspace (krabi_workspace), then:
 
 ```shell
 rosdep install --from-paths src -iry
@@ -66,14 +67,17 @@ colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=
 # Run
 
 To run the robot within the simulation do:
-- `source devel/setup.zsh` ou `source devel/setup.sh`
+- `source install/setup.zsh` ou `source install/setup.sh`
 - `ros2 launch krabi_bringup krabi_launch.py xRobotPos:=0.275  yRobotPos:=0.775 zRobotOrientation:=-1.570796327 isBlue:=false`
 
 ## Usefull aliases
 - `alias krabi="source /opt/ros/jazzy/setup.bash && cd <path_to_workspace> && source install/local_setup.bash && export GZ_PARTITION=krabigz && export ROS_DOMAIN_ID=0` 
-- `alias krabiSimu="krabi && ros2 launch krabi_description spawn_world.py"`
-- `alias krabiSimuFull="krabi && ros2 launch krabi_description spawn_world.py world:=table2026Full.world"`
-- `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=0.275  yRobotPos:=0.775 zRobotOrientation:=-1.570796327"  isBlue:=false`
+- `alias krabiSimu="krabi && ros2 launch krabi_description spawn_world.py gui:=False"`
+- `alias krabiSimuGui="krabi && ros2 launch krabi_description spawn_world.py"`
+- `alias krabiSimuFull="krabi && ros2 launch krabi_description spawn_world.py world:=table2026Full.world gui:=False"`
+- `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False`
+- `alias krabiRunLidarLoc="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.275  yRobotPos:=-0.775 zRobotOrientation:=-1.570796327 isBlue:=True use_lidar_loc:=True"`
+- `alias krabiRunAruco="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=True"`
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
 
 # In action
