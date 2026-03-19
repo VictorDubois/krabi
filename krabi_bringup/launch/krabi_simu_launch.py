@@ -35,6 +35,7 @@ def generate_launch_description():
               executable='tirette.py',
               output='both',
               namespace="krabi_ns",
+              parameters=[{"use_sim_time": use_sim_time_value}]
               )
 
     return LaunchDescription([isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
