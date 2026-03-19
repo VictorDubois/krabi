@@ -75,7 +75,7 @@ To run the robot within the simulation do:
 - `alias krabiSimu="krabi && ros2 launch krabi_description spawn_world.py gui:=False"`
 - `alias krabiSimuGui="krabi && ros2 launch krabi_description spawn_world.py"`
 - `alias krabiSimuFull="krabi && ros2 launch krabi_description spawn_world.py world:=table2026Full.world gui:=False"`
-- `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False`
+- `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False"`
 - `alias krabiRunLidarLoc="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.275  yRobotPos:=-0.775 zRobotOrientation:=-1.570796327 isBlue:=True use_lidar_loc:=True"`
 - `alias krabiRunAruco="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=True"`
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
