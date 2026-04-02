@@ -28,3 +28,6 @@
 [submodule "ros2_aruco"]
 	path = ros2_aruco
 	url = git@github.com:VictorDubois/ros2_aruco.git
+[submodule "krabi_caisse_detector"]
+	path = krabi_caisse_detector
+	url = git@github.com:VictorDubois/krabi_caisse_detector.git
