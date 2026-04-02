@@ -23,7 +23,7 @@ def generate_launch_description():
         executable='static_transform_publisher',
         output='both',
         namespace="krabi_ns",
-        arguments=["--x", "0.0", "--y", "0.15", "--z", "0.30", "--roll", "0", "--pitch", "1.57", "--yaw", "1.57",
+        arguments=["--x", "0.0", "--y", "-0.15", "--z", "0.30", "--roll", "0", "--pitch", "1.57", "--yaw", "-1.57",
                     "--child-frame-id", "camera_link", "--frame-id", "base_link"]
         )
 

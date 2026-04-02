@@ -19,6 +19,7 @@ def generate_launch_description():
     can_hardware_value = LaunchConfiguration('can_hardware')
     do_record_value = LaunchConfiguration('do_record')
     use_aruco_value = LaunchConfiguration('use_aruco')
+    use_caisse_detector_value = LaunchConfiguration('use_caisse_detector')
 
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
@@ -60,6 +61,11 @@ def generate_launch_description():
         default_value='False'
     )
 
+    use_caisse_detector_launch_arg = DeclareLaunchArgument(
+        'use_caisse_detector',
+        default_value='False'
+    )
+
     odom_map_spawn = Node(package='tf2_ros',
         executable='static_transform_publisher',
         output='both',
@@ -78,14 +84,24 @@ def generate_launch_description():
                     "--child-frame-id", "grabi", "--frame-id", "base_link"],
         parameters=[{"use_sim_time": isSimulation_value}]
     )
+
+    billig_base_link_spawn = Node(package='tf2_ros',
+        executable='static_transform_publisher',
+        output='both',
+        namespace="krabi_ns",
+        arguments=["--x", "0", "--y", "-0.2", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "0",
+                    "--child-frame-id", "billig", "--frame-id", "base_link"],
+        parameters=[{"use_sim_time": isSimulation_value}]
+    )
+
     #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
 
     record = ExecuteProcess(condition=IfCondition(do_record_value),
         cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True,
     )
 
-    launch_description = LaunchDescription([do_record_launch_arg, use_aruco_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, 
-                                            zRobotOrientation_launch_arg, isSimulation_launch_arg, use_lidar_loc_launch_arg, 
+    launch_description = LaunchDescription([isSimulation_launch_arg, billig_base_link_spawn, do_record_launch_arg, use_aruco_launch_arg, use_caisse_detector_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, 
+                                            zRobotOrientation_launch_arg, use_lidar_loc_launch_arg, 
                                             can_hardware_launch_arg, odom_map_spawn, grabi_base_link_spawn, record, 
 
         IncludeLaunchDescription(
@@ -153,7 +169,7 @@ def generate_launch_description():
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value,
                 "use_sim_time": isSimulation_value,
-                "use_aruco": use_aruco_value
+                "use_camera": use_aruco_value or use_caisse_detector_value
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
@@ -201,6 +217,20 @@ def generate_launch_description():
                 "use_sim_time": isSimulation_value
             }.items(),
             condition=IfCondition(isSimulation_value)
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('krabi_caisse_detector'),
+                    'launch',
+                    'caisse_detector_launch.py'
+                ])
+            ]),
+            launch_arguments={
+                'isBlue': isBlue_value,
+                "use_sim_time": isSimulation_value
+            }.items(),
+            condition=IfCondition(use_caisse_detector_value)
         ) 
     ])
 
