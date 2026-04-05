@@ -56,6 +56,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        use_sim_time_launch_arg,
         ref_frame_arg,
         ros2_aruco_node
     ])
