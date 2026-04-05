@@ -97,7 +97,7 @@ def generate_launch_description():
     #<node pkg="tf" type="static_transform_publisher" name="base_link_suction_cup" args="0.2 0 0 0 0 0 krabby/suction_cup krabby/base_link 50"/>
 
     record = ExecuteProcess(condition=IfCondition(do_record_value),
-        cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a'], output='screen', log_cmd=True,
+        cwd="/var/log/krabi/", cmd=['ros2', 'bag', 'record', '-a', "--exclude", "(/krabi_ns/camera_node/image_raw|/other_stuff_to_exclude)"], output='screen', log_cmd=True,
     )
 
     launch_description = LaunchDescription([isSimulation_launch_arg, billig_base_link_spawn, do_record_launch_arg, use_aruco_launch_arg, use_caisse_detector_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, 

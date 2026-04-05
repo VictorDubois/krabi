@@ -117,7 +117,7 @@ def generate_launch_description():
     camera_ros_node = Node(
         package='camera_ros',
         executable='camera_node',
-        name='camera_node',
+        name='krabi_cam',
         output='screen',
         namespace="krabi_ns",
         remappings=[
