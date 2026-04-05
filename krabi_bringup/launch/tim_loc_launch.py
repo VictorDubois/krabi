@@ -14,7 +14,8 @@ def generate_launch_description():
                     {'laserscan_topic': 'scan_loc'},
                     {'cloud_topic': "cloud_loc"},
                     {'min_ang': -1.77},
-                    {'max_ang': 2.18}],
+                    {'max_ang': 2.18},
+                    {"tf_base_frame_id": "base_link"}],
         #remappings=[
         #    ('sick_tim_5xx/imu', 'sick_obstacle/imu'),
         #    ('sick_tim_5xx/encoder', 'sick_obstacle/encoder')

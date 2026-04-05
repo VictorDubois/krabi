@@ -29,6 +29,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         LD06_top_base_link_spawn,
-        tim_bottom_base_link_spawn,
+        #tim_bottom_base_link_spawn,
         camera_base_link_spawn
     ])
