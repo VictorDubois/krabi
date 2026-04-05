@@ -15,7 +15,8 @@ def generate_launch_description():
                     {'cloud_topic': "cloud_loc"},
                     {'min_ang': -1.77},
                     {'max_ang': 2.18},
-                    {"tf_base_frame_id": "base_link"}],
+                    {"tf_base_frame_id": "base_link"},
+                    {"tf_publish_rate": 0}],
         #remappings=[
         #    ('sick_tim_5xx/imu', 'sick_obstacle/imu'),
         #    ('sick_tim_5xx/encoder', 'sick_obstacle/encoder')
