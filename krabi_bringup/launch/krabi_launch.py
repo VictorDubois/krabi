@@ -169,7 +169,11 @@ def generate_launch_description():
                 'init_pose/y': yRobotPos_value,
                 'init_pose/theta': zRobotOrientation_value,
                 "use_sim_time": isSimulation_value,
-                "use_camera": use_aruco_value or use_caisse_detector_value
+                "use_camera": PythonExpression([
+                    use_aruco_value,
+                    " or ",
+                    use_caisse_detector_value
+                ])
             }.items(),
             condition=UnlessCondition(isSimulation_value)
         ),
