@@ -123,6 +123,8 @@ def generate_launch_description():
         remappings=[
             ('camera/camera_info', 'krabi_cam/camera_info'),
             ('camera/image_raw', 'krabi_cam/image_raw')],
+        parameters=[
+            {"camera_info_url": "package://krabi_bringup/config/calibrationdata_rpicam3_800x600.yaml"}],
         condition=IfCondition(use_camera_value)
     )
 
