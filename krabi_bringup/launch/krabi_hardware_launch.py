@@ -108,11 +108,8 @@ def generate_launch_description():
         executable='usb_cam_node_exe',
         name='usb_cam_node',
         output='screen',
-        namespace="krabi_ns",
-        remappings=[
-            ('camera_info', 'krabi_cam/camera_info'),
-            ('image_raw', 'krabi_cam/image_raw')
-    ])
+        namespace="krabi_ns"
+    )
 
     camera_ros_node = Node(
         package='camera_ros',
@@ -120,9 +117,6 @@ def generate_launch_description():
         name='krabi_cam',
         output='screen',
         namespace="krabi_ns",
-        remappings=[
-            ('camera/camera_info', 'krabi_cam/camera_info'),
-            ('camera/image_raw', 'krabi_cam/image_raw')],
         parameters=[
             {"camera_info_url": "package://krabi_bringup/config/calibrationdata_rpicam3_800x600.yaml"}],
         condition=IfCondition(use_camera_value)
