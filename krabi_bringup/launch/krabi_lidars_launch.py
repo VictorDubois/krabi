@@ -51,15 +51,6 @@ def generate_launch_description():
         ,condition=IfCondition(use_ld_lidar_instead_of_tim)
     )
 
-    ldlidar_tim_spawn = Node(package='tf2_ros',
-        executable='static_transform_publisher',
-        output='both',
-        namespace="krabi_ns",
-        arguments=["--x", "0", "--y", "0", "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", "-1.570796327",
-                    "--child-frame-id", "ldlidar_top", "--frame-id", "tim_top"]
-    )
-
-
     tim_loc_group = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             PathJoinSubstitution([
@@ -76,6 +67,5 @@ def generate_launch_description():
         tim_obstacles_group
         ,tim_loc_group
         ,ldlidar_obstacles_group
-        ,ldlidar_tim_spawn
     ])
 
