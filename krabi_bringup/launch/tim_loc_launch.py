@@ -18,6 +18,8 @@ def generate_launch_description():
                     {"tf_base_frame_id": "base_link"},
                     {"tf_base_lidar_xyz_rpy": "-0.07,0.091,0.06,3.14159,0,2.35619449"},
                     {"tf_publish_rate": 20}],
+        respawn=True,
+        respawn_delay=5.0,
         #remappings=[
         #    ('sick_tim_5xx/imu', 'sick_obstacle/imu'),
         #    ('sick_tim_5xx/encoder', 'sick_obstacle/encoder')

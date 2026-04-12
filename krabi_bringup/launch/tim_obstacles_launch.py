@@ -14,6 +14,8 @@ def generate_launch_description():
                     {'frame_id': 'krabby/tim_top'},
                     {'laserscan_topic': 'scan_obstacles'},
                     {'cloud_topic': "cloud_obstacles"}],
+        respawn=True,
+        respawn_delay=5.0,
         #remappings=[
         #    ('sick_tim_5xx/imu', 'sick_obstacle/imu'),
         #    ('sick_tim_5xx/encoder', 'sick_obstacle/encoder')
