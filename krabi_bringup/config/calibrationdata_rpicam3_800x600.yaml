@@ -1,6 +1,6 @@
 image_width: 800
 image_height: 600
-camera_name: narrow_stereo
+camera_name: krabi_cam
 camera_matrix:
   rows: 3
   cols: 3
