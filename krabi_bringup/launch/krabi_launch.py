@@ -27,7 +27,7 @@ def generate_launch_description():
     )
     xRobotPos_launch_arg = DeclareLaunchArgument(
         'xRobotPos',
-        default_value='-1.25'
+        default_value='-1.1'
     )
     yRobotPos_launch_arg = DeclareLaunchArgument(
         'yRobotPos',
