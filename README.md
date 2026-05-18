@@ -82,6 +82,14 @@ To run the robot within the simulation do:
 
 # In action
 ## Current team
+
+### 2026
+[![Match 5](Images/Krabi2026_match5.png)](https://www.youtube.com/live/k5Suqyi1aqE?si=t0wPnNDIbidcl6yX&t=4865)
+[Match 4](https://www.youtube.com/live/jrfmvH_gVxM?si=-OrE-Z2rjjJDkdj4&t=2375)
+[Match 3](https://www.youtube.com/live/ISvunlsdgDo?si=CKgdjh3TMWmhJz42&t=5856)
+[Match 2](https://www.youtube.com/live/pXuNJs7dAxo?si=_xTv7n_fmkTlCHpk&t=5827)
+[Match 1](https://www.youtube.com/live/HS5AkY2gTb8?si=WX2xgn9Y3OPDOvQD&t=4516)
+
 ### 2025
 [![Match 5](Images/Krabi2025.png)](https://www.youtube.com/live/5oetXN7tdYc?si=Os8TLiERuT9G4-z0&t=6761)
 [Match 4](https://www.youtube.com/live/fv44r3pMlkQ?si=96i0OfI4LxI49Apz&t=5208)
