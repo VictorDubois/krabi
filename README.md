@@ -20,7 +20,7 @@ These packages are git submodules for this packages
 
 # Documentation
 
-[Have a look at the wiki](https://github.com/VictorDubois/krabi/wiki)
+===> [Have a look at the wiki](https://github.com/VictorDubois/krabi/wiki) <===
 
 # Clone
 
@@ -62,13 +62,8 @@ sudo apt install python3-colcon-common-extensions
 ```shell
 colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic
 ```
-(see alias bellow)
+(see alias krabuild bellow)
 
-# Run
-
-To run the robot within the simulation do:
-- `source install/setup.zsh` ou `source install/setup.sh`
-- `ros2 launch krabi_bringup krabi_launch.py xRobotPos:=0.275  yRobotPos:=0.775 zRobotOrientation:=-1.570796327 isBlue:=false`
 
 ## Usefull aliases
 - `alias krabi="source /opt/ros/jazzy/setup.bash && cd <path_to_workspace> && source install/local_setup.bash && export GZ_PARTITION=krabigz && export ROS_DOMAIN_ID=0` 
@@ -79,6 +74,22 @@ To run the robot within the simulation do:
 - `alias krabiRunLidarLoc="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.275  yRobotPos:=-0.775 zRobotOrientation:=-1.570796327 isBlue:=True use_lidar_loc:=True"`
 - `alias krabiRunAruco="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=True"`
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
+
+## Run
+To run the robot within the simulation do:
+- krabiSimu (in a terminal)
+- krabiRun (in another terminal)
+
+# Other repositories
+
+## Startup scripts
+Used to configure the Raspberry Pi 5 on which this code runs
+
+## Motor board code
+[STM32 code for handling the motors (DC or C610)](https://github.com/VictorDubois/Motor-board-STM32-CAN)
+
+## Actuators board code
+[ESP32-based PCB to handle sensors and actuators](https://github.com/VictorDubois/ActuatorBoardCode)
 
 # In action
 ## Current team
