@@ -71,10 +71,15 @@ colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=
 - `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False use_lidar_loc:=False"`
 - `alias krabiRunAndSimu="krabi && ros2 launch krabi_bringup krabi_start_simu.py gui:=False xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False use_lidar_loc:=False"` (option: world:=table2026Full.world pour avoir les éléments de jeu)
 - `alias krabuild="colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
+- `alias krabiTest="krabuild && colcon test --packages-skip ros2_aruco ros2_aruco_interfaces"`
 
 ## Run
 To run the robot within the simulation do:
 - krabiRunAndSimu
+
+## Test
+To run the unit tests (currently takes about 1min):
+- krabiTest
 
 # Other repositories
 
