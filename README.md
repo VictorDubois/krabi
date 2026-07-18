@@ -92,6 +92,9 @@ Used to configure the Raspberry Pi 5 on which this code runs
 ## Actuators board code
 [ESP32-based PCB to handle sensors and actuators](https://github.com/VictorDubois/ActuatorBoardCode)
 
+## GUI
+[Python GUI, on a touchscreen](https://github.com/VictorDubois/krabi_gui)
+
 # In action
 ## Current team
 
