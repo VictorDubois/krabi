@@ -9,10 +9,18 @@ def main():
     publisher = node.create_publisher(Bool, 'tirette', 10)
     
     msg = Bool()
-    msg.data = True  # Change this to False if you want to publish False
+    msg.data = False  
 
-    sleep(2)
-    
+    sleep(9) # Wait 9s, to account for the billig init.
+
+    for _ in range(50):  # Publish the message for 5s
+        publisher.publish(msg)
+        node.get_logger().info('Published: %r' % msg.data)
+        rclpy.spin_once(node)
+        sleep(0.1)
+
+    msg.data = True  
+
     while rclpy.ok():
         publisher.publish(msg)
         node.get_logger().info('Published: %r' % msg.data)
