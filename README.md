@@ -84,7 +84,7 @@ To run the unit tests (currently takes about 1min):
 # Other repositories
 
 ## Startup scripts
-Used to configure the Raspberry Pi 5 on which this code runs
+[Used to configure the Raspberry Pi 5 on which this code runs](https://github.com/VictorDubois/krabi-startscripts)
 
 ## Motor board code
 [STM32 code for handling the motors (DC or C610)](https://github.com/VictorDubois/Motor-board-STM32-CAN)
