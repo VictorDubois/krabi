@@ -95,6 +95,9 @@ To run the unit tests (currently takes about 1min):
 ## GUI
 [Python GUI, on a touchscreen](https://github.com/VictorDubois/krabi_gui)
 
+## PAMIs
+Code of the small robots helping Krabi](https://code.electrolab.fr/Victor/rosserial-varspeedservos/-/tree/Pami_Pixi2)
+
 # In action
 ## Current team
 
