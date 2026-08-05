@@ -119,7 +119,11 @@ def generate_launch_description():
         namespace="krabi_ns",
         parameters=[
             {"camera_info_url": "package://krabi_bringup/config/calibrationdata_rpicam3_800x600.yaml"},
-            {"frame_id": "camera_link"}],
+            {"frame_id": "camera_link"},
+            #{"width": 1536},
+            #{"height": 864},
+            #{"orientation": 0},
+            ],
         condition=IfCondition(use_camera_value)
     )
 
