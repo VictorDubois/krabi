@@ -120,6 +120,7 @@ def generate_launch_description():
         parameters=[
             {"camera_info_url": "package://krabi_bringup/config/calibrationdata_rpicam3_800x600.yaml"},
             {"frame_id": "camera_link"},
+            # Full camera FoV. Warning, this uses a lot more CPU
             #{"width": 1536},
             #{"height": 864},
             #{"orientation": 0},
