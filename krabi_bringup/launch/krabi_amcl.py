@@ -14,9 +14,10 @@ def generate_launch_description():
     xRobotPos_value = LaunchConfiguration('xRobotPos')
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
-    tfFromAmcl_value = LaunchConfiguration('tfFromAmcl')
+    tfFromAmclOrEKF_value = LaunchConfiguration('tfFromAmclOrEKF')
+    tfFromEKF_value = LaunchConfiguration('tfFromEKF')
     use_sim_time_value = LaunchConfiguration('use_sim_time')
-    
+
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
         default_value='False'
@@ -33,11 +34,14 @@ def generate_launch_description():
         'zRobotOrientation',
         default_value='0.0'
     )
-    tfFromAmcl_launch_arg = DeclareLaunchArgument(
-        'tfFromAmcl',
+    tfFromAmclOrEKF_launch_arg = DeclareLaunchArgument(
+        'tfFromAmclOrEKF',
         default_value='True'
     )
-
+    tfFromEKF_launch_arg = DeclareLaunchArgument(
+        'tfFromEKF',
+        default_value='False'
+    )
     use_sim_time_launch_arg = DeclareLaunchArgument(
         'use_sim_time',
         default_value='False'
@@ -64,7 +68,7 @@ def generate_launch_description():
                            "map_topic": "/map",
                            "set_initial_pose": True,
                            "base_frame_id": "base_link",
-                           "tf_broadcast": tfFromAmcl_value, #True si on veut utiliser la loc lidar sans EKF
+                           "tf_broadcast": PythonExpression([tfFromAmclOrEKF_value, " and not ", tfFromEKF_value]), #True si on veut utiliser la loc lidar sans EKF
                            "laser_min_range": 0.05,
                            "update_min_d": 0.02,
                            "update_min_a": 0.02,
@@ -89,6 +93,8 @@ def generate_launch_description():
                                  0.0,  0.0,  0.0],
                             "use_sim_time": use_sim_time_value}
                             ,PathJoinSubstitution([FindPackageShare('krabi_bringup'), 'params', 'ekf_template_krabi.yaml'])
+                            # Override the publish_tf parameter based on the launch arguments
+                            ,{"publish_tf": PythonExpression([tfFromAmclOrEKF_value, " and ", tfFromEKF_value])}
                         ],
               )
 
@@ -110,4 +116,4 @@ def generate_launch_description():
               "use_sim_time": use_sim_time_value}],
               )
 
-    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tfFromAmcl_launch_arg, amcl_spawn,map_server_spawn, lifecycle_autostart_spawn, robot_localization_spawn])
+    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tfFromAmclOrEKF_launch_arg, tfFromEKF_launch_arg, amcl_spawn,map_server_spawn, lifecycle_autostart_spawn, robot_localization_spawn])
