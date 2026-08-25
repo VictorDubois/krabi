@@ -58,7 +58,7 @@ def generate_launch_description():
                             "min_particles": 500,
                             "max_particles": 2000,
                             "max_beams": 300,
-                            "alpha1": 0.05,
+                            "alpha1": 0.5,
                            "alpha2": 0.05,
                            "alpha3": 0.05,
                            "alpha4": 0.05,
