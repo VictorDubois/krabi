@@ -81,6 +81,11 @@ To run the robot within the simulation do:
 To run the unit tests (currently takes about 1min):
 - krabiTest
 
+# What to do for a new year/rules
+- [Update the simulation](https://github.com/VictorDubois/krabby_description/blob/main/README.md#what-to-do-for-a-new-yearrules)
+- [Update the obstacle detection (= "lidar strategy"), to take into account the static obstable on the table](https://github.com/VictorDubois/lidar_strategy/tree/main#what-to-do-for-a-new-year)
+- [But the biggest task is to update the strategy (= "goal strategy")](https://github.com/VictorDubois/goal_strategy/tree/main#what-to-do-for-a-new-year)
+
 # Other repositories
 
 ## Startup scripts
