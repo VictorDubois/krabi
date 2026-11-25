@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 """Tirette simulée.
 
-Séquence d'une vraie tirette : insérée (False) puis retirée (True) = départ du match.
+Comme sur le vrai robot, le robot démarre sans tirette : le topic `tirette` vaut True (absente).
+Le match ne part que sur la séquence complète : insérée (False), puis retirée (True).
 
-- auto_start = True  : comportement historique, le match démarre tout seul (~14 s après le lancement).
-- auto_start = False : la tirette est insérée puis on attend le service `start_match`
-                       (std_srvs/Trigger). Entre les deux, on peut lancer start_recalage /
-                       go_to_start sur goal_strat.
+- auto_start = True  : comportement historique, la tirette est insérée ~9 s après le lancement,
+                       puis retirée 5 s plus tard : le match démarre tout seul.
+- auto_start = False : on pilote la tirette avec deux services (std_srvs/Trigger) :
+                         insert_tirette : insère la tirette (le robot s'initialise)
+                         start_match    : la retire (départ du match)
+                       Avant, pendant ou après l'insertion, on peut lancer un recalage.
 """
 import threading
-from time import sleep
 
 import rclpy
 from std_msgs.msg import Bool
 from std_srvs.srv import Trigger
+
+ABSENT, INSERTED, REMOVED = 'absente', 'insérée', 'retirée'
 
 
 def main():
@@ -23,55 +27,64 @@ def main():
     auto_start = node.get_parameter('auto_start').value
     publisher = node.create_publisher(Bool, 'tirette', 10)
 
-    start_requested = threading.Event()
+    lock = threading.Lock()
+    state = {'value': ABSENT}
 
-    def start_match_cb(_request, response):
-        if start_requested.is_set():
-            response.success = False
-            response.message = 'match déjà lancé'
-        else:
-            start_requested.set()
-            response.success = True
-            response.message = 'tirette retirée : départ du match'
-        node.get_logger().info(response.message)
-        return response
+    def move(expected, new, ok_message, refusal):
+        def callback(_request, response):
+            with lock:
+                response.success = state['value'] == expected
+                if response.success:
+                    state['value'] = new
+            response.message = ok_message if response.success else refusal
+            node.get_logger().info(response.message)
+            return response
+        return callback
 
-    node.create_service(Trigger, 'start_match', start_match_cb)
+    node.create_service(Trigger, 'insert_tirette', move(
+        ABSENT, INSERTED, 'tirette insérée',
+        'refusé : tirette déjà insérée, ou match lancé'))
+    node.create_service(Trigger, 'start_match', move(
+        INSERTED, REMOVED, 'tirette retirée : départ du match',
+        "refusé : insérer d'abord la tirette (insert_tirette), ou match déjà lancé"))
 
-    # Le service doit répondre pendant qu'on dort dans la boucle principale
-    spin_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
-    spin_thread.start()
+    # Publiée en continu, comme le GPIO du vrai robot : True = absente / retirée
+    def publish():
+        with lock:
+            inserted = state['value'] == INSERTED
+        publisher.publish(Bool(data=not inserted))
 
-    def publish_for(value, seconds):
-        msg = Bool()
-        msg.data = value
-        for _ in range(int(seconds * 10)):
-            publisher.publish(msg)
-            sleep(0.1)
+    node.create_timer(0.1, publish)
 
-    sleep(9)  # Wait 9s, to account for the billig init.
+    if auto_start:
+        # Sequence on a 1 s timer: inserted at 9 s (time for the billig init), removed 5 s later
+        elapsed = {'s': 0}
 
-    # Tirette insérée pendant 5 s (goal_strat : WAIT_TIRETTE_IN -> INIT -> WAIT_TIRETTE)
-    publish_for(False, 5)
+        def sequence():
+            elapsed['s'] += 1
+            with lock:
+                if elapsed['s'] == 9 and state['value'] == ABSENT:
+                    state['value'] = INSERTED
+                    node.get_logger().info('tirette insérée (auto_start)')
+                elif elapsed['s'] == 14 and state['value'] == INSERTED:
+                    state['value'] = REMOVED
+                    node.get_logger().info('Published: True (départ)')
 
-    if not auto_start:
-        # On arrête de publier : goal_strat garde la dernière valeur (False)
+        node.create_timer(1.0, sequence)
+    else:
         node.get_logger().info(
-            'Match en attente. Lancer : ros2 service call /krabi_ns/start_match std_srvs/srv/Trigger')
-        # Attente avec timeout pour pouvoir s'arrêter proprement (Ctrl+C / fin du launch)
-        while not start_requested.wait(0.2):
-            if not rclpy.ok():
-                return
+            'Tirette absente. Insérer : ros2 service call /krabi_ns/insert_tirette '
+            'std_srvs/srv/Trigger ; départ : ros2 service call /krabi_ns/start_match '
+            'std_srvs/srv/Trigger')
 
-    msg = Bool()
-    msg.data = True
-    node.get_logger().info('Published: True (départ)')
-    while rclpy.ok():
-        publisher.publish(msg)
-        sleep(0.1)
-
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        rclpy.spin(node)
+    except (KeyboardInterrupt, rclpy.executors.ExternalShutdownException):
+        pass
+    finally:
+        node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':
