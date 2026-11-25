@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch_ros.substitutions import FindPackageShare
 import os
@@ -66,14 +67,18 @@ def generate_launch_description():
         default_value='False'
     )
 
-    odom_map_spawn = Node(package='tf2_ros',
-        executable='static_transform_publisher',
+    # map -> odom : TF dynamique corrigeable par le service correct_pose (recalage bordure).
+    # Remplace l'ancien static_transform_publisher. Sans lidar loc uniquement (sinon AMCL publie map -> odom).
+    odom_map_spawn = Node(package='main_strategy',
+        executable='map_odom_publisher',
         output='both',
         namespace="krabi_ns",
-        arguments=["--x", xRobotPos_value, "--y", yRobotPos_value, "--z", "0", "--roll", "0", "--pitch", "0", "--yaw", zRobotOrientation_value,
-                    "--child-frame-id", "odom", "--frame-id", "map"],
         condition=IfCondition(PythonExpression(["not ", use_lidar_loc_value])),
-        parameters=[{"use_sim_time": isSimulation_value}]
+        # ParameterValue(float) : sinon "0" serait lu comme un entier et le nœud (double) refuserait.
+        parameters=[{"init_pose/x": ParameterValue(xRobotPos_value, value_type=float)},
+                    {"init_pose/y": ParameterValue(yRobotPos_value, value_type=float)},
+                    {"init_pose/theta": ParameterValue(zRobotOrientation_value, value_type=float)},
+                    {"use_sim_time": isSimulation_value}]
     )
 
     grabi_base_link_spawn = Node(package='tf2_ros',

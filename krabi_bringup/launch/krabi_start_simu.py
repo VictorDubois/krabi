@@ -70,6 +70,7 @@ def generate_launch_description():
             'use_caisse_detector': use_caisse_detector,
             'use_lidar_loc':     use_lidar_loc,
             'isSimulation':      'True',
+            'auto_start':        LaunchConfiguration('auto_start'),
         }.items()
     )
 
@@ -82,6 +83,8 @@ def generate_launch_description():
         DeclareLaunchArgument('use_caisse_detector', default_value='False'),
         DeclareLaunchArgument('use_lidar_loc',     default_value='False'),
         DeclareLaunchArgument('gui',               default_value='False'),
+        # False : le match ne démarre pas tout seul (service start_match)
+        DeclareLaunchArgument('auto_start',        default_value='False'),
         DeclareLaunchArgument('gz_world',          default_value='table2026.world'),
         kill_gz,
         RegisterEventHandler(

@@ -1,5 +1,6 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch_ros.substitutions import FindPackageShare
 import os
@@ -14,6 +15,7 @@ def generate_launch_description():
     yRobotPos_value = LaunchConfiguration('yRobotPos')
     zRobotOrientation_value = LaunchConfiguration('zRobotOrientation')
     use_sim_time_value = LaunchConfiguration('use_sim_time')
+    auto_start_value = LaunchConfiguration('auto_start')
 
     isBlue_launch_arg = DeclareLaunchArgument(
         'isBlue',
@@ -35,14 +37,20 @@ def generate_launch_description():
         'use_sim_time',
         default_value='False'
     )
+    # False : le match attend `ros2 service call /krabi_ns/start_match std_srvs/srv/Trigger`
+    auto_start_launch_arg = DeclareLaunchArgument(
+        'auto_start',
+        default_value='False'
+    )
     tirette_spawn = Node(package='krabi_bringup',
               executable='tirette.py',
               output='both',
               namespace="krabi_ns",
-              parameters=[{"use_sim_time": use_sim_time_value}]
+              parameters=[{"use_sim_time": use_sim_time_value},
+                          {"auto_start": ParameterValue(auto_start_value, value_type=bool)}]
               )
 
-    return LaunchDescription([use_sim_time_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
+    return LaunchDescription([use_sim_time_launch_arg, auto_start_launch_arg, isBlue_launch_arg, xRobotPos_launch_arg, yRobotPos_launch_arg, zRobotOrientation_launch_arg, tirette_spawn,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([
                 PathJoinSubstitution([
