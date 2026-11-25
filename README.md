@@ -22,6 +22,8 @@ These packages are git submodules for this packages
 
 ===> [Have a look at the wiki](https://github.com/VictorDubois/krabi/wiki) <===
 
+- [Recalage sur bordures, zones, IHM, démarrage sans tirette](https://github.com/VictorDubois/goal_strategy/blob/main/docs/RECALAGE.md)
+
 # Clone
 
 - If you do not already have a ROS 2 workspace, create it: `mkdir -p krabi_workspace/src && cd krabi_workspace/src`
@@ -69,7 +71,7 @@ colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=
 - `alias krabi="source /opt/ros/jazzy/setup.bash && cd <path_to_workspace> && source install/local_setup.bash && export GZ_PARTITION=krabigz && export ROS_DOMAIN_ID=0` 
 - `alias krabiSimu="krabi && ros2 launch krabi_description spawn_world.py gui:=False"` 
 - `alias krabiRun="krabi && ros2 launch krabi_bringup krabi_launch.py xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False use_lidar_loc:=False"`
-- `alias krabiRunAndSimu="krabi && ros2 launch krabi_bringup krabi_start_simu.py gui:=False xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False use_lidar_loc:=False"` (option: world:=table2026Full.world pour avoir les éléments de jeu)
+- `alias krabiRunAndSimu="krabi && ros2 launch krabi_bringup krabi_start_simu.py gui:=False xRobotPos:=-1.25  yRobotPos:=-0.75 zRobotOrientation:=1.570796327 isBlue:=True use_aruco:=False use_lidar_loc:=False"` (option: gz_world:=table2026Full.world pour avoir les éléments de jeu)
 - `alias krabuild="krabi && colcon build --merge-install --symlink-install --cmake-args '-DCMAKE_BUILD_TYPE=RelWithDebInfo' '-DCMAKE_EXPORT_COMPILE_COMMANDS=On' -Wall -Wextra -Wpedantic"`
 - `alias krabiTest="krabuild && colcon test --packages-skip ros2_aruco ros2_aruco_interfaces"`
 
