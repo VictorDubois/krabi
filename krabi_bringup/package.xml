@@ -19,6 +19,8 @@
   <exec_depend>rosidl_default_runtime</exec_depend>
 
   <exec_depend>ros2launch</exec_depend>
+  <exec_depend>main_strategy</exec_depend> <!-- map_odom_publisher -->
+  <exec_depend>std_srvs</exec_depend> <!-- tirette.py : start_match -->
   <member_of_group>rosidl_interface_packages</member_of_group>
   
   <build_depend>rclpy</build_depend>
